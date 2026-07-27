@@ -1,0 +1,1771 @@
+// ============================================================
+// Prisma Schema — Phase 4: Prisma Schema Implementation
+//
+// يُنفَّذ هذا الملف على مراحل (4.1 → 4.11) حسب الوثائق المعتمَدة:
+// Master Project Document · Information Architecture ·
+// Knowledge Architecture · Content Models ·
+// Enterprise Database Architecture · Database Logical Design.
+//
+// This file is implemented in stages (4.1 → 4.11) per the approved
+// documents listed above. Each stage is marked with a banner comment.
+// No table absent from Database Logical Design is added; no table is
+// removed; no relationship is changed without a documented technical
+// reason (see PRISMA_IMPLEMENTATION_REPORT.md for every such exception).
+//
+// استثناء موثَّق #1 — استراتيجية المفاتيح الأساسية:
+// النماذج الأربعة التالية (User, Account, Session) أُنشئت في مرحلة
+// الأساس (Phase 1) باستخدام cuid()، قبل اعتماد استراتيجية UUIDv7 في
+// Database Logical Design §3 ("كل جدول بلا استثناء"). عُدِّلت هنا إلى
+// uuid(7) لمطابقة القرار المعتمَد لاحقًا — سبب تقني موثَّق، لا تغيير
+// عشوائي. VerificationToken لا يملك عمود id مستقلاً أصلاً فتُرِك كما هو.
+//
+// Documented exception #1 — Primary key strategy:
+// The following models (User, Account, Session) were created in the
+// Foundation phase (Phase 1) using cuid(), before the UUIDv7 strategy
+// was approved in Database Logical Design §3 ("every table without
+// exception"). They are updated here to uuid(7) to match that later
+// approved decision — a documented technical reason, not an arbitrary
+// change. VerificationToken has no standalone id column to begin with,
+// so it is left unchanged.
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// الأدوار تُطابق حرفيًا القيم في config/permissions.ts — لا تُعدّل هنا
+// دون تحديث ذلك الملف أيضًا.
+// Roles must mirror config/permissions.ts exactly — update both together.
+//
+// استثناء موثَّق #2 — Permission وUserRole (مرحلة 4.1):
+// طلبت تعليمات هذه المرحلة نماذج Role/Permission/UserRole. Role موجود
+// مسبقًا كـ enum (لا جدول) — هذا متوافق تمامًا مع Database Logical
+// Design الذي لا يحتوي جداول Role/Permission/UserRole أصلاً، ومتوافق مع
+// القرار المعماري الصريح في Enterprise Database Architecture §10.1: "الصلاحيات
+// تُفرَض على مستوى طبقة التطبيق، لا كأدوار قاعدة بيانات خام". بناءً على
+// قاعدة "لا تضف أي جدول غير موجود في التصميم المنطقي" المذكورة في نفس
+// طلب هذه المرحلة، لم تُنشأ جداول Permission وUserRole. التفاصيل الكاملة
+// في PRISMA_IMPLEMENTATION_REPORT.md.
+//
+// Documented exception #2 — Permission and UserRole (Stage 4.1):
+// This stage's instructions listed Role/Permission/UserRole models.
+// Role already exists as an enum (not a table) — fully consistent with
+// Database Logical Design, which contains no Role/Permission/UserRole
+// tables at all, and with the explicit architectural decision in
+// Enterprise Database Architecture §10.1 ("permissions are enforced at
+// the application layer, not as raw database roles"). Per this same
+// stage's own rule ("do not add any table absent from the logical
+// design"), Permission and UserRole tables were NOT created. Full
+// reasoning in PRISMA_IMPLEMENTATION_REPORT.md.
+enum Role {
+  VISITOR
+  MEMBER
+  STUDENT
+  TEACHER
+  SCHOLAR_REVIEWER
+  COMMUNITY_MODERATOR
+  ADMIN
+}
+
+// نماذج NextAuth/Auth.js القياسية (Prisma Adapter) + حقل الدور المضاف.
+// Standard NextAuth/Auth.js models (Prisma Adapter) + an added role field.
+model User {
+  id            String    @id @default(uuid(7)) @db.Uuid
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  role          Role      @default(MEMBER)
+
+  accounts Account[]
+  sessions Session[]
+
+  // علاقات عكسية مضافة في المرحلة 4.1 — Scholar/Translator N:1 بسبب نمط
+  // "صف لكل لغة" (كل ملف عالِم/مترجم له صف واحد لكل لغة، جميعها تشير
+  // لنفس User)؛ Reviewer فريد (1:0..1) لأنه غير قابل للترجمة.
+  // Back-relations added in Stage 4.1 — Scholar/Author/Translator are
+  // N:1 because of the "row per language" pattern (each profile has one
+  // row per language, all pointing to the same User); Reviewer is
+  // unique (1:0..1) since it isn't translatable.
+  scholarProfiles    Scholar[]
+  authorProfiles     Author[]
+  translatorProfiles Translator[]
+  reviewerProfile    Reviewer?
+  coursesTaught      Course[]
+  enrollments        Enrollment[]
+  quizAttempts       QuizAttempt[]
+  mosquesSubmitted   Mosque[]
+  auditLogEntries    AuditLogEntry[]
+  securityEvents     SecurityEventLog[]
+  contentVersions    ContentVersion[]
+  draftRevisions     DraftRevision[]
+  videosUploaded     Video[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(uuid(7)) @db.Uuid
+  userId            String  @db.Uuid
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(uuid(7)) @db.Uuid
+  sessionToken String   @unique
+  userId       String   @db.Uuid
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// ============================================================
+// أنماط دورة الحياة الخمسة (A-E) — Content Models §0.3 /
+// Database Logical Design. تُعرَّف مرة واحدة، تُستخدَم عبر كل الوحدات.
+// The five lifecycle patterns (A-E), defined once, reused across
+// every module.
+// ============================================================
+
+// النمط A — دورة تحريرية كاملة / Pattern A — full editorial lifecycle
+enum ContentStatus {
+  DRAFT
+  REVIEW
+  SCHOLARLY_REVIEW
+  PUBLISHED
+  ARCHIVED
+}
+
+// النمط B — بيانات مرجعية مستوردة / Pattern B — imported reference data
+enum ReferenceStatus {
+  IMPORTED
+  VALIDATED
+  ACTIVE
+  UNDER_CORRECTION
+}
+
+// النمط C — خط أنابيب الوسائط / Pattern C — media pipeline
+enum MediaStatus {
+  UPLOADED
+  PROCESSING
+  REVIEW
+  PUBLISHED
+  ARCHIVED
+}
+
+// النمط D — تشغيلي / Pattern D — operational (people & places)
+enum OperationalStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+// حالة التحقق الفرعية للأماكن (جزء من النمط D)
+// Verification sub-status for places (part of Pattern D)
+enum VerificationStatus {
+  SUBMITTED
+  VERIFIED
+  REJECTED
+}
+
+// النمط E — تصنيف / Pattern E — taxonomy
+enum TaxonomyStatus {
+  ACTIVE
+  DEPRECATED
+}
+
+// ============================================================
+// STAGE 4.1 — Identity & Access (تابع / continued)
+// Database Logical Design §2.1
+// ============================================================
+
+enum Era {
+  CLASSICAL
+  CONTEMPORARY
+}
+
+model Scholar {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  // ترجمة — Translation pattern (§0.3 Database Logical Design)
+  localeGroupId String @map("locale_group_id") @db.Uuid
+  language      String @db.VarChar(10)
+
+  fullName               String  @map("full_name") @db.VarChar(150)
+  biography              String  @map("biography") @db.Text
+  specializationTopicId  String  @map("specialization_topic_id") @db.Uuid
+  era                    Era
+  credentialsSummary     String? @map("credentials_summary") @db.VarChar(500)
+  isLivingMember         Boolean @default(false) @map("is_living_member")
+  linkedUserId           String? @map("linked_user_id") @db.Uuid
+
+  linkedUser     User?  @relation(fields: [linkedUserId], references: [id], onDelete: SetNull)
+  specialization Topic  @relation(fields: [specializationTopicId], references: [id], onDelete: Restrict)
+
+  // الأعمدة القياسية (§0.2 Database Logical Design)
+  version           Int       @default(1)
+  status            ContentStatus @default(DRAFT)
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+  deletedAt         DateTime? @map("deleted_at")
+  createdBy         String    @map("created_by") @db.Uuid
+  updatedBy         String?   @map("updated_by") @db.Uuid
+  reviewedBy        String?   @map("reviewed_by") @db.Uuid
+  approvedBy        String?   @map("approved_by") @db.Uuid
+  publishedBy       String?   @map("published_by") @db.Uuid
+  seoSlug           String?   @map("seo_slug") @db.VarChar(255)
+  seoMetaTitle      String?   @map("seo_meta_title") @db.VarChar(60)
+  seoMetaDescription String?  @map("seo_meta_description") @db.VarChar(160)
+  isAiIndexable     Boolean   @default(false) @map("is_ai_indexable")
+  isSearchIndexed   Boolean   @default(false) @map("is_search_indexed")
+
+  affiliations         ScholarCenterAffiliation[]
+  tafsirs              Tafsir[]
+  gradedHadiths        Hadith[]
+  compiledCollections  HadithCollection[]
+  commentaries         ScholarCommentary[]
+  fatwas               Fatwa[]
+  articles             Article[]
+  books                Book[]
+  eventAppearances     EventScholar[]
+
+  @@unique([localeGroupId, language])
+  @@index([specializationTopicId])
+  @@index([status, language])
+  @@map("scholars")
+}
+
+model Author {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  localeGroupId String @map("locale_group_id") @db.Uuid
+  language      String @db.VarChar(10)
+
+  fullName  String  @map("full_name") @db.VarChar(150)
+  biography String? @db.Text
+  penName   String? @map("pen_name") @db.VarChar(100)
+  userId    String  @map("user_id") @db.Uuid
+
+  user User @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  version            Int           @default(1)
+  status              OperationalStatus @default(ACTIVE)
+  createdAt          DateTime      @default(now()) @map("created_at")
+  updatedAt          DateTime      @updatedAt @map("updated_at")
+  deletedAt          DateTime?     @map("deleted_at")
+  createdBy          String        @map("created_by") @db.Uuid
+  updatedBy          String?       @map("updated_by") @db.Uuid
+  seoSlug            String?       @map("seo_slug") @db.VarChar(255)
+  seoMetaTitle       String?       @map("seo_meta_title") @db.VarChar(60)
+  seoMetaDescription String?       @map("seo_meta_description") @db.VarChar(160)
+  isAiIndexable      Boolean       @default(false) @map("is_ai_indexable")
+  isSearchIndexed    Boolean       @default(false) @map("is_search_indexed")
+
+  recitations Recitation[]
+  articles    Article[]
+  books       Book[]
+  audiosAsSpeaker Audio[]
+
+  @@unique([localeGroupId, language])
+  @@index([userId])
+  @@map("authors")
+}
+
+model Translator {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  localeGroupId String @map("locale_group_id") @db.Uuid
+  language      String @db.VarChar(10)
+
+  fullName                String  @map("full_name") @db.VarChar(150)
+  biography               String? @db.Text
+  credentialsSummary      String? @map("credentials_summary") @db.VarChar(500)
+  userId                  String  @map("user_id") @db.Uuid
+  isCertificationVerified Boolean @default(false) @map("is_certification_verified")
+
+  user              User                   @relation(fields: [userId], references: [id], onDelete: Restrict)
+  languages         TranslatorLanguage[]
+  quranTranslations QuranTranslation[]
+
+  version            Int               @default(1)
+  status              OperationalStatus @default(ACTIVE)
+  createdAt          DateTime          @default(now()) @map("created_at")
+  updatedAt          DateTime          @updatedAt @map("updated_at")
+  deletedAt          DateTime?         @map("deleted_at")
+  createdBy          String            @map("created_by") @db.Uuid
+  updatedBy          String?           @map("updated_by") @db.Uuid
+  seoSlug            String?           @map("seo_slug") @db.VarChar(255)
+  seoMetaTitle       String?           @map("seo_meta_title") @db.VarChar(60)
+  seoMetaDescription String?           @map("seo_meta_description") @db.VarChar(160)
+  isAiIndexable      Boolean           @default(false) @map("is_ai_indexable")
+  isSearchIndexed    Boolean           @default(false) @map("is_search_indexed")
+
+  @@unique([localeGroupId, language])
+  @@index([userId])
+  @@map("translators")
+}
+
+model Reviewer {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  fullName     String  @map("full_name") @db.VarChar(150)
+  userId       String  @unique @map("user_id") @db.Uuid
+  // reviewScope: مصفوفة مراجع Topic — تُترَك كمصفوفة UUID عادية (Prisma
+  // لا يدعم علاقة N:M مباشرة إلى قيم Enum أو بلا جدول ربط صريح لحقل
+  // مصفوفة بسيط)؛ موثَّق في التقرير النهائي كقيد Prisma.
+  // reviewScope: array of Topic references — kept as a plain UUID array
+  // (Prisma has no native N:M without an explicit join table for a
+  // simple array field); documented in the final report as a Prisma
+  // constraint.
+  reviewScope  String[] @map("review_scope") @db.Uuid
+  activeStatus Boolean  @default(true) @map("active_status")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("reviewers")
+}
+
+model TranslatorLanguage {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  translatorId String @map("translator_id") @db.Uuid
+  languageCode String @map("language_code") @db.VarChar(10)
+
+  translator Translator @relation(fields: [translatorId], references: [id], onDelete: Cascade)
+  language   Language   @relation(fields: [languageCode], references: [isoCode], onDelete: Restrict)
+
+  @@unique([translatorId, languageCode])
+  @@map("translator_languages")
+}
+
+model ScholarCenterAffiliation {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  scholarId       String @map("scholar_id") @db.Uuid
+  islamicCenterId String @map("islamic_center_id") @db.Uuid
+
+  scholar       Scholar       @relation(fields: [scholarId], references: [id], onDelete: Cascade)
+  islamicCenter IslamicCenter @relation(fields: [islamicCenterId], references: [id], onDelete: Cascade)
+
+  @@unique([scholarId, islamicCenterId])
+  @@map("scholar_center_affiliations")
+}
+
+// ============================================================
+// STAGE 4.2 — Localization
+// Database Logical Design §2.9
+// ============================================================
+
+enum TextDirection {
+  RTL
+  LTR
+}
+
+model Language {
+  isoCode        String        @id @db.VarChar(10)
+  nameLocalized  String        @map("name_localized") @db.VarChar(50)
+  direction      TextDirection
+  isActive       Boolean       @default(false) @map("is_active")
+
+  translatorLanguages TranslatorLanguage[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("languages")
+}
+
+// كيان خفيف جدًا عمدًا — معرِّف فقط، بلا أعمدة وصفية (Database Logical
+// Design §9). لا حقل عكسي صريح هنا لكل جدول قابل للترجمة (~40 جدولاً)
+// لتفادي تضخّم هذا النموذج بأربعين علاقة عكسية؛ الربط يتم عبر localeGroupId
+// كعمود عادي في كل جدول، لا كعلاقة Prisma ثنائية الاتجاه إلزامية —
+// قيد Prisma موثَّق في التقرير النهائي.
+//
+// Deliberately minimal entity — identifier only, no descriptive columns
+// (Database Logical Design §9). No explicit back-relation here for every
+// translatable table (~40 tables) to avoid bloating this model with forty
+// back-relations; linkage happens via localeGroupId as a plain column on
+// each table, not a mandatory two-way Prisma relation — a Prisma
+// constraint documented in the final report.
+model LocaleGroup {
+  id        String   @id @default(uuid(7)) @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("locale_groups")
+}
+
+// ============================================================
+// STAGE 4.3 — Taxonomy
+// Database Logical Design §2.8
+// ============================================================
+
+model Category {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  localeGroupId String @map("locale_group_id") @db.Uuid
+  language      String @db.VarChar(10)
+
+  nameLocalized    String  @map("name_localized") @db.VarChar(100)
+  parentCategoryId String? @map("parent_category_id") @db.Uuid
+  iconImageId      String? @map("icon_image_id") @db.Uuid
+  sortOrder        Int     @default(0) @map("sort_order")
+  depthLevel       Int     @default(0) @map("depth_level")
+  isScholarlyGated Boolean @default(false) @map("is_scholarly_gated")
+  status           TaxonomyStatus @default(ACTIVE)
+
+  parent    Category?  @relation("CategoryHierarchy", fields: [parentCategoryId], references: [id], onDelete: Restrict)
+  children  Category[] @relation("CategoryHierarchy")
+  iconImage Image?     @relation(fields: [iconImageId], references: [id], onDelete: SetNull)
+  articles  Article[]
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+  createdBy String    @map("created_by") @db.Uuid
+  updatedBy String?   @map("updated_by") @db.Uuid
+
+  @@unique([localeGroupId, language])
+  @@index([parentCategoryId])
+  @@index([status, language])
+  @@map("categories")
+}
+
+enum TopicFacet {
+  FIQH
+  AQIDAH
+  SEERAH
+  HADITH_CLASS
+  QURAN_CLASS
+  LEVEL
+  AUDIENCE
+  GENERAL_TOPIC
+}
+
+model Topic {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  localeGroupId String @map("locale_group_id") @db.Uuid
+  language      String @db.VarChar(10)
+
+  nameLocalized    String     @map("name_localized") @db.VarChar(100)
+  parentTopicId    String?    @map("parent_topic_id") @db.Uuid
+  facetType        TopicFacet @map("facet_type")
+  isScholarlyGated Boolean    @default(false) @map("is_scholarly_gated")
+  status           TaxonomyStatus @default(ACTIVE)
+
+  parent   Topic?  @relation("TopicHierarchy", fields: [parentTopicId], references: [id], onDelete: Restrict)
+  children Topic[] @relation("TopicHierarchy")
+
+  scholars          Scholar[]
+  assignments       TopicAssignment[]
+  fatwas            Fatwa[]
+  coursesAsLevel    Course[] @relation("CourseLevelTopic")
+  coursesAsAudience Course[] @relation("CourseAudienceTopic")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+  createdBy String    @map("created_by") @db.Uuid
+  updatedBy String?   @map("updated_by") @db.Uuid
+
+  @@unique([localeGroupId, language])
+  @@index([parentTopicId])
+  @@index([facetType, status, language])
+  @@map("topics")
+}
+
+model Tag {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  localeGroupId String @map("locale_group_id") @db.Uuid
+  language      String @db.VarChar(10)
+
+  nameLocalized String  @map("name_localized") @db.VarChar(50)
+  usageCount    Int     @default(0) @map("usage_count")
+  status        TaxonomyStatus @default(ACTIVE)
+
+  assignments TagAssignment[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  createdBy String   @map("created_by") @db.Uuid
+
+  @@unique([localeGroupId, language])
+  @@index([language, nameLocalized])
+  @@map("tags")
+}
+
+// نمط مرجع متعدد الأنواع (Polymorphic) — Database Logical Design §2.8.
+// Prisma لا يدعم مفاتيح أجنبية متعددة الأنواع أصيلاً؛ subjectType +
+// subjectId زوج عادي بلا قيد FK صارم على مستوى القاعدة (تحقق تطبيقي)،
+// موثَّق كقيد Prisma في التقرير النهائي.
+//
+// Polymorphic reference pattern — Prisma has no native multi-type
+// foreign key; subjectType + subjectId is a plain pair with no
+// database-level FK constraint (application-level validation instead),
+// documented as a Prisma constraint in the final report.
+enum TaxonomySubjectType {
+  ARTICLE
+  FATWA
+  COURSE
+  LESSON
+  BOOK
+  HADITH
+  SURAH
+  TAFSIR
+  SCHOLAR_COMMENTARY
+  EVENT
+}
+
+model TopicAssignment {
+  id          String              @id @default(uuid(7)) @db.Uuid
+  subjectType TaxonomySubjectType @map("subject_type")
+  subjectId   String              @map("subject_id") @db.Uuid
+  topicId     String              @map("topic_id") @db.Uuid
+
+  topic Topic @relation(fields: [topicId], references: [id], onDelete: Restrict)
+
+  @@unique([subjectType, subjectId, topicId])
+  @@index([subjectType, subjectId])
+  @@map("topic_assignments")
+}
+
+model TagAssignment {
+  id          String              @id @default(uuid(7)) @db.Uuid
+  subjectType TaxonomySubjectType @map("subject_type")
+  subjectId   String              @map("subject_id") @db.Uuid
+  tagId       String              @map("tag_id") @db.Uuid
+
+  tag Tag @relation(fields: [tagId], references: [id], onDelete: Restrict)
+
+  @@unique([subjectType, subjectId, tagId])
+  @@index([subjectType, subjectId])
+  @@map("tag_assignments")
+}
+
+// ============================================================
+// STAGE 4.4 — Quran Domain
+// Database Logical Design §2.2
+// ============================================================
+
+enum Riwayah {
+  HAFS_ASIM
+  WARSH_NAFI
+}
+
+model Quran {
+  id               String  @id @default(uuid(7)) @db.Uuid
+  riwayah          Riwayah
+  totalSurahCount  Int     @default(114) @map("total_surah_count")
+  totalVerseCount  Int     @map("total_verse_count")
+  sourceEdition    String  @map("source_edition") @db.VarChar(255)
+  isDefault        Boolean @default(false) @map("is_default")
+
+  surahs Surah[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("qurans")
+}
+
+enum RevelationType {
+  MECCAN
+  MEDINAN
+}
+
+model Surah {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  quranId             String  @map("quran_id") @db.Uuid
+  number              Int
+  arabicName          String  @map("arabic_name") @db.VarChar(100)
+  transliteratedName  String  @map("transliterated_name") @db.VarChar(100)
+  // ترجمة translated_name عبر النمط القياسي — الكيان نفسه غير مقسَّم
+  // بصف-لكل-لغة كامل (بيانات مرجعية Reference)؛ الاسم المترجَم وحده
+  // مكرَّر لكل لغة عبر جدول ربط بسيط بدل تكرار كل الصف الكامل، استثناء
+  // مبرَّر عن نمط "صف-لكل-لغة" الموحَّد لأن Surah كيان مرجعي لا تحريري.
+  // translated_name translated via a lightweight side-array instead of
+  // the full row-per-language pattern, since Surah is Reference (not
+  // editorial) data — an exception documented in the final report.
+  translatedNames     Json?   @map("translated_names")
+  revelationType      RevelationType @map("revelation_type")
+  verseCount          Int     @map("verse_count")
+  orderOfRevelation   Int     @map("order_of_revelation")
+
+  quran  Quran   @relation(fields: [quranId], references: [id], onDelete: Restrict)
+  verses Verse[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([number])
+  @@unique([orderOfRevelation])
+  @@index([quranId])
+  @@map("surahs")
+}
+
+model Verse {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  surahId              String  @map("surah_id") @db.Uuid
+  verseNumberInSurah   Int     @map("verse_number_in_surah")
+  absoluteVerseNumber  Int     @unique @map("absolute_verse_number")
+  arabicTextUthmani    String  @map("arabic_text_uthmani") @db.Text
+  arabicTextSimple     String  @map("arabic_text_simple") @db.Text
+  juzNumber            Int     @map("juz_number")
+  hizbNumber           Int     @map("hizb_number")
+  pageNumber           Int?    @map("page_number")
+  sajdahFlag           Boolean @default(false) @map("sajdah_flag")
+  status               ReferenceStatus @default(IMPORTED)
+
+  surah              Surah              @relation(fields: [surahId], references: [id], onDelete: Restrict)
+  words              Word[]
+  quranTranslations  QuranTranslation[]
+  tafsirVerses       TafsirVerse[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // ملاحظة: Prisma Schema Language لا يدعم CHECK constraints أصيلاً (لا
+  // يوجد @@check) — قيد absolute_verse_number BETWEEN 1 AND 6236 يُضاف
+  // لاحقًا عبر SQL يدوي ضمن ملف Migration (prisma migrate dev ثم تحرير
+  // ملف SQL الناتج)، لا عبر Prisma Schema نفسه. موثَّق في التقرير النهائي.
+  // Note: Prisma Schema Language has no native CHECK constraint support
+  // (no @@check) — the absolute_verse_number BETWEEN 1 AND 6236
+  // constraint will be added later via raw SQL inside a migration file
+  // (prisma migrate dev, then editing the generated SQL), not via the
+  // Prisma schema itself. Documented in the final report.
+  @@index([surahId, verseNumberInSurah])
+  @@map("verses")
+}
+
+enum MorphologicalTag {
+  NOUN
+  VERB
+  PARTICLE
+}
+
+model Word {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  verseId           String  @map("verse_id") @db.Uuid
+  positionInVerse    Int     @map("position_in_verse")
+  arabicText         String  @map("arabic_text") @db.VarChar(50)
+  transliteration    String? @db.VarChar(80)
+  morphologicalTag   MorphologicalTag @map("morphological_tag")
+  rootId             String? @map("root_id") @db.Uuid
+  wordGloss          String? @map("word_gloss") @db.VarChar(200)
+
+  verse Verse @relation(fields: [verseId], references: [id], onDelete: Restrict)
+  root  Root? @relation(fields: [rootId], references: [id], onDelete: SetNull)
+
+  @@unique([verseId, positionInVerse])
+  @@index([rootId])
+  @@map("words")
+}
+
+model Root {
+  id              String  @id @default(uuid(7)) @db.Uuid
+  rootLetters     String  @unique @map("root_letters") @db.VarChar(10)
+  generalMeaning  String? @map("general_meaning") @db.VarChar(300)
+  occurrenceCount Int     @default(0) @map("occurrence_count")
+
+  words Word[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("roots")
+}
+
+model QuranTranslation {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  localeGroupId String @map("locale_group_id") @db.Uuid
+  language      String @db.VarChar(10)
+
+  verseId             String  @map("verse_id") @db.Uuid
+  translatorId        String  @map("translator_id") @db.Uuid
+  translatedText      String  @map("translated_text") @db.Text
+  methodologyNote     String? @map("methodology_note") @db.VarChar(500)
+  footnotes           String? @db.Text
+  disclaimerAccepted  Boolean @default(false) @map("disclaimer_accepted")
+  status              ContentStatus @default(DRAFT)
+
+  verse      Verse      @relation(fields: [verseId], references: [id], onDelete: Restrict)
+  translator Translator @relation(fields: [translatorId], references: [id], onDelete: Restrict)
+
+  version   Int       @default(1)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+  createdBy String    @map("created_by") @db.Uuid
+  reviewedBy String?  @map("reviewed_by") @db.Uuid
+  approvedBy String?  @map("approved_by") @db.Uuid
+  publishedBy String? @map("published_by") @db.Uuid
+  isAiIndexable   Boolean @default(false) @map("is_ai_indexable")
+  isSearchIndexed Boolean @default(false) @map("is_search_indexed")
+
+  @@unique([localeGroupId, language])
+  @@index([verseId])
+  @@index([status, language])
+  @@map("quran_translations")
+}
+
+enum TafsirScopeType {
+  SINGLE_VERSE
+  VERSE_RANGE
+  SURAH
+}
+
+model Tafsir {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  localeGroupId String @map("locale_group_id") @db.Uuid
+  language      String @db.VarChar(10)
+
+  title      String          @db.VarChar(200)
+  bodyText   String          @map("body_text") @db.Text
+  scopeType  TafsirScopeType @map("scope_type")
+  sourceType Era             @map("source_type")
+  scholarId  String          @map("scholar_id") @db.Uuid
+  bookId     String?         @map("book_id") @db.Uuid
+  status     ContentStatus   @default(DRAFT)
+
+  scholar Scholar       @relation(fields: [scholarId], references: [id], onDelete: Restrict)
+  book    Book?         @relation(fields: [bookId], references: [id], onDelete: SetNull)
+  verses  TafsirVerse[]
+
+  version   Int       @default(1)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+  createdBy String    @map("created_by") @db.Uuid
+  reviewedBy String?  @map("reviewed_by") @db.Uuid
+  approvedBy String?  @map("approved_by") @db.Uuid
+  publishedBy String? @map("published_by") @db.Uuid
+  seoSlug   String?   @map("seo_slug") @db.VarChar(255)
+  isAiIndexable   Boolean @default(false) @map("is_ai_indexable")
+  isSearchIndexed Boolean @default(false) @map("is_search_indexed")
+
+  @@unique([localeGroupId, language])
+  @@index([scholarId])
+  @@index([status, language])
+  @@map("tafsirs")
+}
+
+model TafsirVerse {
+  id       String @id @default(uuid(7)) @db.Uuid
+  tafsirId String @map("tafsir_id") @db.Uuid
+  verseId  String @map("verse_id") @db.Uuid
+
+  tafsir Tafsir @relation(fields: [tafsirId], references: [id], onDelete: Cascade)
+  verse  Verse  @relation(fields: [verseId], references: [id], onDelete: Restrict)
+
+  @@unique([tafsirId, verseId])
+  @@map("tafsir_verses")
+}
+
+enum RecitationScopeType {
+  VERSE
+  SURAH
+  JUZ
+}
+
+model Recitation {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  reciterId       String              @map("reciter_id") @db.Uuid
+  audioId         String              @map("audio_id") @db.Uuid
+  riwayah         Riwayah
+  scopeType       RecitationScopeType @map("scope_type")
+  surahId         String?             @map("surah_id") @db.Uuid
+  durationSeconds Int                 @map("duration_seconds")
+  status          MediaStatus         @default(UPLOADED)
+
+  reciter Author @relation(fields: [reciterId], references: [id], onDelete: Restrict)
+  audio   Audio  @relation(fields: [audioId], references: [id], onDelete: Restrict)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  createdBy String   @map("created_by") @db.Uuid
+
+  @@index([reciterId])
+  @@index([status])
+  @@map("recitations")
+}
+
+// ============================================================
+// STAGE 4.5 — Hadith Domain
+// Database Logical Design §2.3
+// ============================================================
+
+enum HadithGrade {
+  SAHIH
+  HASAN
+  DAIF
+  MAWDU
+}
+
+model Hadith {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  matnText            String      @map("matn_text") @db.Text
+  grade               HadithGrade
+  gradingScholarId    String      @map("grading_scholar_id") @db.Uuid
+  hadithCollectionId  String      @map("hadith_collection_id") @db.Uuid
+  bookId              String      @map("book_id") @db.Uuid
+  status              ReferenceStatus @default(IMPORTED)
+
+  gradingScholar   Scholar          @relation(fields: [gradingScholarId], references: [id], onDelete: Restrict)
+  hadithCollection HadithCollection @relation(fields: [hadithCollectionId], references: [id], onDelete: Restrict)
+  book             Book             @relation(fields: [bookId], references: [id], onDelete: Restrict)
+  narrators        HadithNarrator[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([grade])
+  @@index([hadithCollectionId])
+  @@map("hadiths")
+}
+
+model HadithCollection {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  localeGroupId       String @map("locale_group_id") @db.Uuid
+  language            String @db.VarChar(10)
+
+  collectionName      String @map("collection_name") @db.VarChar(150)
+  compilerScholarId   String @map("compiler_scholar_id") @db.Uuid
+  era                 String? @db.VarChar(50)
+  totalHadithCount    Int    @default(0) @map("total_hadith_count")
+  status              ReferenceStatus @default(IMPORTED)
+
+  compilerScholar Scholar  @relation(fields: [compilerScholarId], references: [id], onDelete: Restrict)
+  hadiths         Hadith[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([localeGroupId, language])
+  @@map("hadith_collections")
+}
+
+enum GenerationLayer {
+  COMPANION
+  SUCCESSOR
+  SUCCESSOR_OF_SUCCESSOR
+  LATER_NARRATOR
+}
+
+model Narrator {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  localeGroupId          String @map("locale_group_id") @db.Uuid
+  language               String @db.VarChar(10)
+
+  fullName                String          @map("full_name") @db.VarChar(150)
+  generationLayer         GenerationLayer @map("generation_layer")
+  reliabilityAssessment   String          @map("reliability_assessment") @db.VarChar(500)
+  birthEra                String?         @map("birth_era") @db.VarChar(50)
+  deathEra                String?         @map("death_era") @db.VarChar(50)
+  status                  ReferenceStatus @default(IMPORTED)
+
+  hadithChains HadithNarrator[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([localeGroupId, language])
+  @@map("narrators")
+}
+
+model HadithNarrator {
+  id            String @id @default(uuid(7)) @db.Uuid
+  hadithId      String @map("hadith_id") @db.Uuid
+  narratorId    String @map("narrator_id") @db.Uuid
+  chainPosition Int    @map("chain_position")
+
+  hadith   Hadith   @relation(fields: [hadithId], references: [id], onDelete: Cascade)
+  narrator Narrator @relation(fields: [narratorId], references: [id], onDelete: Restrict)
+
+  @@unique([hadithId, chainPosition])
+  @@index([narratorId])
+  @@map("hadith_narrators")
+}
+
+model ScholarCommentary {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  localeGroupId String @map("locale_group_id") @db.Uuid
+  language      String @db.VarChar(10)
+
+  title             String              @db.VarChar(200)
+  bodyText          String              @map("body_text") @db.Text
+  scholarId         String              @map("scholar_id") @db.Uuid
+  relatedEntityType TaxonomySubjectType @map("related_entity_type")
+  relatedEntityId   String              @map("related_entity_id") @db.Uuid
+  status            ContentStatus       @default(DRAFT)
+
+  scholar Scholar @relation(fields: [scholarId], references: [id], onDelete: Restrict)
+
+  version   Int       @default(1)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+  createdBy String    @map("created_by") @db.Uuid
+  reviewedBy String?  @map("reviewed_by") @db.Uuid
+  approvedBy String?  @map("approved_by") @db.Uuid
+  isAiIndexable   Boolean @default(false) @map("is_ai_indexable")
+  isSearchIndexed Boolean @default(false) @map("is_search_indexed")
+
+  @@unique([localeGroupId, language])
+  @@index([relatedEntityType, relatedEntityId])
+  @@map("scholar_commentaries")
+}
+
+// ============================================================
+// STAGE 4.6 — Islamic Knowledge
+// Database Logical Design §2.4
+// ============================================================
+
+model Fatwa {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  localeGroupId String @map("locale_group_id") @db.Uuid
+  language      String @db.VarChar(10)
+
+  questionText        String   @map("question_text") @db.Text
+  answerText          String   @map("answer_text") @db.Text
+  fiqhSchoolTopicId   String   @map("fiqh_school_topic_id") @db.Uuid
+  issueDate           DateTime @map("issue_date") @db.Date
+  scholarId           String   @map("scholar_id") @db.Uuid
+  status              ContentStatus @default(DRAFT)
+
+  fiqhSchool Topic   @relation(fields: [fiqhSchoolTopicId], references: [id], onDelete: Restrict)
+  scholar    Scholar @relation(fields: [scholarId], references: [id], onDelete: Restrict)
+
+  version     Int       @default(1)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+  createdBy   String    @map("created_by") @db.Uuid
+  reviewedBy  String?   @map("reviewed_by") @db.Uuid
+  // approvedBy: يجب أن يختلف عن scholarId (استقلالية الاعتماد — Content
+  // Models §3.1). قيد بين عمودين، غير قابل للتعبير كـ Prisma attribute
+  // بسيط؛ يُفرَض في طبقة الخدمة (services/) لا في Schema. موثَّق كقيد
+  // Prisma في التقرير النهائي.
+  // approvedBy: must differ from scholarId (approval independence rule
+  // — Content Models §3.1). A cross-column constraint, not expressible
+  // as a simple Prisma attribute; enforced in the service layer
+  // (services/), not the schema. Documented as a Prisma constraint in
+  // the final report.
+  approvedBy  String?   @map("approved_by") @db.Uuid
+  publishedBy String?   @map("published_by") @db.Uuid
+  seoSlug     String?   @map("seo_slug") @db.VarChar(255)
+  isAiIndexable   Boolean @default(false) @map("is_ai_indexable")
+  isSearchIndexed Boolean @default(false) @map("is_search_indexed")
+
+  @@unique([localeGroupId, language])
+  @@index([scholarId])
+  @@index([status, language])
+  @@map("fatwas")
+}
+
+model Article {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  localeGroupId String @map("locale_group_id") @db.Uuid
+  language      String @db.VarChar(10)
+
+  title             String  @db.VarChar(200)
+  bodyText          String  @map("body_text") @db.Text
+  excerpt           String  @db.VarChar(300)
+  featuredImageId   String? @map("featured_image_id") @db.Uuid
+  authorId          String? @map("author_id") @db.Uuid
+  scholarId         String? @map("scholar_id") @db.Uuid
+  categoryId        String  @map("category_id") @db.Uuid
+  status            ContentStatus @default(DRAFT)
+
+  author        Author?  @relation(fields: [authorId], references: [id], onDelete: Restrict)
+  scholar       Scholar? @relation(fields: [scholarId], references: [id], onDelete: Restrict)
+  category      Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  featuredImage Image?   @relation(fields: [featuredImageId], references: [id], onDelete: SetNull)
+
+  version     Int       @default(1)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+  createdBy   String    @map("created_by") @db.Uuid
+  reviewedBy  String?   @map("reviewed_by") @db.Uuid
+  approvedBy  String?   @map("approved_by") @db.Uuid
+  publishedBy String?   @map("published_by") @db.Uuid
+  seoSlug            String? @map("seo_slug") @db.VarChar(255)
+  seoMetaTitle       String? @map("seo_meta_title") @db.VarChar(60)
+  seoMetaDescription String? @map("seo_meta_description") @db.VarChar(160)
+  isAiIndexable   Boolean @default(false) @map("is_ai_indexable")
+  isSearchIndexed Boolean @default(false) @map("is_search_indexed")
+
+  @@unique([localeGroupId, language])
+  @@index([categoryId])
+  @@index([status, language])
+  @@map("articles")
+}
+
+enum BookType {
+  HADITH
+  FIQH
+  SEERAH
+  TAFSIR
+  GENERAL
+}
+
+model Book {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  title              String   @db.VarChar(250)
+  authorId           String?  @map("author_id") @db.Uuid
+  scholarId          String?  @map("scholar_id") @db.Uuid
+  publicationEra     String   @map("publication_era") @db.VarChar(50)
+  bookType           BookType @map("book_type")
+  digitalAttachmentId String? @map("digital_attachment_id") @db.Uuid
+  isbn               String?  @db.VarChar(20)
+
+  author           Author?     @relation(fields: [authorId], references: [id], onDelete: Restrict)
+  scholar          Scholar?    @relation(fields: [scholarId], references: [id], onDelete: Restrict)
+  digitalAttachment Attachment? @relation(fields: [digitalAttachmentId], references: [id], onDelete: SetNull)
+  hadiths          Hadith[]
+  tafsirs          Tafsir[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([authorId])
+  @@index([scholarId])
+  @@map("books")
+}
+
+enum CitationSourceType {
+  ARTICLE
+  FATWA
+  SCHOLAR_COMMENTARY
+  TAFSIR
+}
+
+enum CitationTargetType {
+  VERSE
+  HADITH
+  FATWA
+}
+
+model Citation {
+  id         String             @id @default(uuid(7)) @db.Uuid
+  sourceType CitationSourceType @map("source_type")
+  sourceId   String             @map("source_id") @db.Uuid
+  targetType CitationTargetType @map("target_type")
+  targetId   String             @map("target_id") @db.Uuid
+
+  @@unique([sourceType, sourceId, targetType, targetId])
+  @@index([sourceType, sourceId])
+  @@index([targetType, targetId])
+  @@map("citations")
+}
+
+// ============================================================
+// STAGE 4.7 — Learning
+// Database Logical Design §2.5
+// ============================================================
+
+model Course {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  localeGroupId String @map("locale_group_id") @db.Uuid
+  language      String @db.VarChar(10)
+
+  title               String  @db.VarChar(200)
+  description         String  @db.Text
+  levelTopicId        String  @map("level_topic_id") @db.Uuid
+  audienceTopicId     String  @map("audience_topic_id") @db.Uuid
+  certificateEligible Boolean @default(false) @map("certificate_eligible")
+  coverImageId        String? @map("cover_image_id") @db.Uuid
+  teacherId           String  @map("teacher_id") @db.Uuid
+  status              ContentStatus @default(DRAFT)
+
+  levelTopic    Topic  @relation("CourseLevelTopic", fields: [levelTopicId], references: [id], onDelete: Restrict)
+  audienceTopic Topic  @relation("CourseAudienceTopic", fields: [audienceTopicId], references: [id], onDelete: Restrict)
+  teacher       User   @relation(fields: [teacherId], references: [id], onDelete: Restrict)
+  coverImage    Image? @relation(fields: [coverImageId], references: [id], onDelete: SetNull)
+
+  lessons     Lesson[]
+  quizzes     Quiz[]
+  enrollments Enrollment[]
+
+  version     Int       @default(1)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+  createdBy   String    @map("created_by") @db.Uuid
+  reviewedBy  String?   @map("reviewed_by") @db.Uuid
+  approvedBy  String?   @map("approved_by") @db.Uuid
+  publishedBy String?   @map("published_by") @db.Uuid
+  seoSlug            String? @map("seo_slug") @db.VarChar(255)
+  seoMetaTitle       String? @map("seo_meta_title") @db.VarChar(60)
+  seoMetaDescription String? @map("seo_meta_description") @db.VarChar(160)
+  isAiIndexable   Boolean @default(false) @map("is_ai_indexable")
+  isSearchIndexed Boolean @default(false) @map("is_search_indexed")
+
+  @@unique([localeGroupId, language])
+  @@index([status, language])
+  @@map("courses")
+}
+
+enum LessonContentType {
+  TEXT
+  VIDEO
+  MIXED
+}
+
+model Lesson {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  localeGroupId String @map("locale_group_id") @db.Uuid
+  language      String @db.VarChar(10)
+
+  courseId                  String            @map("course_id") @db.Uuid
+  title                     String            @db.VarChar(200)
+  orderIndex                Int               @map("order_index")
+  contentType               LessonContentType @map("content_type")
+  bodyText                  String?           @map("body_text") @db.Text
+  estimatedDurationMinutes  Int               @map("estimated_duration_minutes")
+  quizId                    String?           @map("quiz_id") @db.Uuid
+  status                    ContentStatus     @default(DRAFT)
+
+  course       Course              @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  quiz         Quiz?               @relation("LessonQuiz", fields: [quizId], references: [id], onDelete: SetNull)
+  contentItems LessonContentItem[]
+
+  version   Int       @default(1)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+  createdBy String    @map("created_by") @db.Uuid
+
+  @@unique([courseId, orderIndex])
+  @@index([status, language])
+  @@map("lessons")
+}
+
+enum LessonContentKind {
+  VIDEO
+  AUDIO
+  ARTICLE
+}
+
+model LessonContentItem {
+  id          String            @id @default(uuid(7)) @db.Uuid
+  lessonId    String            @map("lesson_id") @db.Uuid
+  contentType LessonContentKind @map("content_type")
+  contentId   String            @map("content_id") @db.Uuid
+  orderIndex  Int               @map("order_index")
+
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@index([lessonId])
+  @@map("lesson_content_items")
+}
+
+model Quiz {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  title                    String @db.VarChar(200)
+  courseId                 String? @map("course_id") @db.Uuid
+  passingScorePercentage   Int    @default(70) @map("passing_score_percentage")
+  attemptLimit             Int?   @map("attempt_limit")
+  timeLimitMinutes         Int?   @map("time_limit_minutes")
+
+  course    Course?        @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons   Lesson[]       @relation("LessonQuiz")
+  questions Question[]
+  attempts  QuizAttempt[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  createdBy String   @map("created_by") @db.Uuid
+
+  @@index([courseId])
+  @@map("quizzes")
+}
+
+enum QuestionType {
+  MULTIPLE_CHOICE
+  TRUE_FALSE
+  SHORT_ANSWER
+}
+
+model Question {
+  id           String       @id @default(uuid(7)) @db.Uuid
+  quizId       String       @map("quiz_id") @db.Uuid
+  questionText String       @map("question_text") @db.VarChar(500)
+  questionType QuestionType @map("question_type")
+  points       Int          @default(1)
+  orderIndex   Int          @map("order_index")
+
+  quiz    Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  answers Answer[]
+
+  @@unique([quizId, orderIndex])
+  @@map("questions")
+}
+
+model Answer {
+  id              String  @id @default(uuid(7)) @db.Uuid
+  questionId      String  @map("question_id") @db.Uuid
+  answerText      String  @map("answer_text") @db.VarChar(300)
+  isCorrect       Boolean @default(false) @map("is_correct")
+  explanationText String? @map("explanation_text") @db.VarChar(500)
+  orderIndex      Int     @map("order_index")
+
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@map("answers")
+}
+
+model Enrollment {
+  id                  String    @id @default(uuid(7)) @db.Uuid
+  userId              String    @map("user_id") @db.Uuid
+  courseId            String    @map("course_id") @db.Uuid
+  enrolledAt          DateTime  @default(now()) @map("enrolled_at")
+  progressPercentage  Int       @default(0) @map("progress_percentage")
+  completedAt         DateTime? @map("completed_at")
+  certificateIssued   Boolean   @default(false) @map("certificate_issued")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Restrict)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Restrict)
+
+  @@unique([userId, courseId])
+  @@map("enrollments")
+}
+
+model QuizAttempt {
+  id             String    @id @default(uuid(7)) @db.Uuid
+  userId         String    @map("user_id") @db.Uuid
+  quizId         String    @map("quiz_id") @db.Uuid
+  attemptNumber  Int       @map("attempt_number")
+  scorePercentage Int?     @map("score_percentage")
+  startedAt      DateTime  @default(now()) @map("started_at")
+  submittedAt    DateTime? @map("submitted_at")
+  passed         Boolean?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Restrict)
+  quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Restrict)
+
+  @@unique([userId, quizId, attemptNumber])
+  @@map("quiz_attempts")
+}
+
+// ============================================================
+// STAGE 4.8 — Media
+// Database Logical Design §2.6
+// ============================================================
+
+model Video {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  title            String  @db.VarChar(200)
+  storageFileKey   String  @map("storage_file_key") @db.VarChar(500)
+  durationSeconds  Int     @map("duration_seconds")
+  resolution       String  @db.VarChar(20)
+  transcriptText   String? @map("transcript_text") @db.Text
+  thumbnailImageId String  @map("thumbnail_image_id") @db.Uuid
+  uploaderUserId   String  @map("uploader_user_id") @db.Uuid
+  status           MediaStatus @default(UPLOADED)
+
+  thumbnailImage Image @relation(fields: [thumbnailImageId], references: [id], onDelete: Restrict)
+  uploader       User  @relation(fields: [uploaderUserId], references: [id], onDelete: Restrict)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@map("videos")
+}
+
+model Audio {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  title           String  @db.VarChar(200)
+  storageFileKey  String  @map("storage_file_key") @db.VarChar(500)
+  durationSeconds Int     @map("duration_seconds")
+  speakerId       String? @map("speaker_id") @db.Uuid
+  transcriptText  String? @map("transcript_text") @db.Text
+  status          MediaStatus @default(UPLOADED)
+
+  speaker     Author?      @relation(fields: [speakerId], references: [id], onDelete: SetNull)
+  recitations Recitation[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([speakerId])
+  @@index([status])
+  @@map("audios")
+}
+
+model Image {
+  id             String @id @default(uuid(7)) @db.Uuid
+  storageFileKey String @map("storage_file_key") @db.VarChar(500)
+  altText        String @map("alt_text") @db.VarChar(200)
+  caption        String? @db.VarChar(300)
+  widthPx        Int    @map("width_px")
+  heightPx       Int    @map("height_px")
+  status         MediaStatus @default(UPLOADED)
+
+  videos     Video[]
+  categories Category[]
+  articles   Article[]
+  courses    Course[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("images")
+}
+
+enum AttachmentFileType {
+  PDF
+  PPTX
+  DOCX
+  XLSX
+  OTHER
+}
+
+model Attachment {
+  id             String             @id @default(uuid(7)) @db.Uuid
+  storageFileKey String             @map("storage_file_key") @db.VarChar(500)
+  fileType       AttachmentFileType @map("file_type")
+  fileSizeBytes  Int                @map("file_size_bytes")
+  title          String             @db.VarChar(200)
+  description    String?            @db.VarChar(500)
+  status         MediaStatus        @default(UPLOADED)
+
+  books Book[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("attachments")
+}
+
+enum MediaUsageType {
+  VIDEO
+  AUDIO
+  IMAGE
+  ATTACHMENT
+}
+
+enum MediaUsageContextType {
+  LESSON
+  ARTICLE
+  EVENT
+  COURSE
+}
+
+enum MediaUsageRole {
+  FEATURED
+  INLINE
+}
+
+model MediaUsage {
+  id          String                 @id @default(uuid(7)) @db.Uuid
+  mediaType   MediaUsageType         @map("media_type")
+  mediaId     String                 @map("media_id") @db.Uuid
+  contextType MediaUsageContextType  @map("context_type")
+  contextId   String                 @map("context_id") @db.Uuid
+  usageRole   MediaUsageRole         @default(INLINE) @map("usage_role")
+
+  @@index([mediaType, mediaId])
+  @@index([contextType, contextId])
+  @@map("media_usages")
+}
+
+// ============================================================
+// STAGE 4.9 — Geography
+// Database Logical Design §2.7
+// ============================================================
+
+model Country {
+  id            String @id @default(uuid(7)) @db.Uuid
+  isoCode       String @unique @map("iso_code") @db.VarChar(2)
+  nameLocalized String @map("name_localized") @db.VarChar(100)
+  region        String @db.VarChar(50)
+
+  cities City[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("countries")
+}
+
+model City {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  countryId          String  @map("country_id") @db.Uuid
+  nameLocalized       String  @map("name_localized") @db.VarChar(100)
+  latitude             Decimal @db.Decimal(9, 6)
+  longitude            Decimal @db.Decimal(9, 6)
+  timezoneIdentifier   String  @map("timezone_identifier") @db.VarChar(50)
+
+  country       Country        @relation(fields: [countryId], references: [id], onDelete: Restrict)
+  mosques       Mosque[]
+  islamicCenters IslamicCenter[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([countryId])
+  @@map("cities")
+}
+
+enum PrayerTimeSource {
+  CALCULATED
+  MANUAL
+}
+
+model Mosque {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  localeGroupId String @map("locale_group_id") @db.Uuid
+  language      String @db.VarChar(10)
+
+  cityId              String              @map("city_id") @db.Uuid
+  name                String              @db.VarChar(200)
+  latitude            Decimal             @db.Decimal(9, 6)
+  longitude           Decimal             @db.Decimal(9, 6)
+  address             String              @db.VarChar(300)
+  prayerTimeSource    PrayerTimeSource    @default(CALCULATED) @map("prayer_time_source")
+  verificationStatus  VerificationStatus  @default(SUBMITTED) @map("verification_status")
+  contactInfo         String?             @map("contact_info") @db.VarChar(200)
+  submittedBy         String              @map("submitted_by") @db.Uuid
+
+  city       City                       @relation(fields: [cityId], references: [id], onDelete: Restrict)
+  submitter  User                       @relation(fields: [submittedBy], references: [id], onDelete: Restrict)
+  centers    MosqueCenterAffiliation[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([localeGroupId, language])
+  @@index([cityId])
+  @@map("mosques")
+}
+
+model IslamicCenter {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  localeGroupId String @map("locale_group_id") @db.Uuid
+  language      String @db.VarChar(10)
+
+  cityId             String             @map("city_id") @db.Uuid
+  name               String             @db.VarChar(200)
+  latitude           Decimal            @db.Decimal(9, 6)
+  longitude          Decimal            @db.Decimal(9, 6)
+  contactInfo        String?            @map("contact_info") @db.VarChar(200)
+  verificationStatus VerificationStatus @default(SUBMITTED) @map("verification_status")
+
+  city         City                        @relation(fields: [cityId], references: [id], onDelete: Restrict)
+  mosques      MosqueCenterAffiliation[]
+  scholars     ScholarCenterAffiliation[]
+  events       Event[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([localeGroupId, language])
+  @@index([cityId])
+  @@map("islamic_centers")
+}
+
+model MosqueCenterAffiliation {
+  id              String @id @default(uuid(7)) @db.Uuid
+  mosqueId        String @map("mosque_id") @db.Uuid
+  islamicCenterId String @map("islamic_center_id") @db.Uuid
+
+  mosque        Mosque        @relation(fields: [mosqueId], references: [id], onDelete: Cascade)
+  islamicCenter IslamicCenter @relation(fields: [islamicCenterId], references: [id], onDelete: Cascade)
+
+  @@unique([mosqueId, islamicCenterId])
+  @@map("mosque_center_affiliations")
+}
+
+model Event {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  localeGroupId String @map("locale_group_id") @db.Uuid
+  language      String @db.VarChar(10)
+
+  title           String    @db.VarChar(200)
+  description     String?   @db.Text
+  startTime       DateTime  @map("start_time")
+  endTime         DateTime? @map("end_time")
+  isVirtual       Boolean   @default(false) @map("is_virtual")
+  islamicCenterId String?   @map("islamic_center_id") @db.Uuid
+  status          ContentStatus @default(DRAFT)
+
+  islamicCenter IslamicCenter?  @relation(fields: [islamicCenterId], references: [id], onDelete: SetNull)
+  scholars      EventScholar[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  createdBy String   @map("created_by") @db.Uuid
+
+  @@unique([localeGroupId, language])
+  @@map("events")
+}
+
+model EventScholar {
+  id        String @id @default(uuid(7)) @db.Uuid
+  eventId   String @map("event_id") @db.Uuid
+  scholarId String @map("scholar_id") @db.Uuid
+
+  event   Event   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  scholar Scholar @relation(fields: [scholarId], references: [id], onDelete: Restrict)
+
+  @@unique([eventId, scholarId])
+  @@map("event_scholars")
+}
+
+// ============================================================
+// STAGE 4.10 — Audit
+// Database Logical Design §2.12
+//
+// ملاحظة تفسير: قائمة المراحل الـ11 المطلوبة في هذه المهمة لم تُخصِّص
+// مرحلة منفصلة لنطاق "AI" (رغم وجوده كنطاق مستقل رقم 11 من 13 في
+// Enterprise Database Architecture §1). بما أن حذف الجدول المعتمَد
+// (AICitationLog) غير مسموح ("لا تحذف أي جدول")، وُضع هنا ضمن مرحلة
+// Audit لتقارب طبيعته (سجل تتبّع Append-Only) — قرار تنظيمي موثَّق، لا
+// إضافة جدول جديد غير معتمَد.
+//
+// Interpretation note: the 11 requested stages did not allocate a
+// separate stage for the "AI" domain (though it exists as its own
+// domain #11 of 13 in Enterprise Database Architecture §1). Since
+// removing an approved table (AICitationLog) is not permitted ("do not
+// delete any table"), it is placed here under Audit given its similar
+// nature (an append-only tracking log) — a documented organizational
+// choice, not the addition of a new, unapproved table.
+// ============================================================
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  APPROVE
+  DELETE
+  RESTORE
+}
+
+model AuditLogEntry {
+  id                     String      @id @default(uuid(7)) @db.Uuid
+  entityType             String      @map("entity_type") @db.VarChar(50)
+  entityId               String      @map("entity_id") @db.Uuid
+  action                 AuditAction
+  actorUserId            String      @map("actor_user_id") @db.Uuid
+  actorRoleAtTime         String      @map("actor_role_at_time") @db.VarChar(30)
+  previousStatus         String?     @map("previous_status") @db.VarChar(30)
+  newStatus              String?     @map("new_status") @db.VarChar(30)
+  changedFields          Json?       @map("changed_fields")
+  relatedContentVersionId String?    @map("related_content_version_id") @db.Uuid
+  reason                 String?     @db.VarChar(500)
+  occurredAt             DateTime    @default(now()) @map("occurred_at")
+
+  actor           User            @relation(fields: [actorUserId], references: [id], onDelete: Restrict)
+  relatedVersion  ContentVersion? @relation(fields: [relatedContentVersionId], references: [id], onDelete: SetNull)
+
+  @@index([entityType, entityId, occurredAt])
+  @@map("audit_log_entries")
+}
+
+enum SecurityEventType {
+  LOGIN_SUCCESS
+  LOGIN_FAILURE
+  PERMISSION_DENIED
+  ROLE_CHANGED
+}
+
+model SecurityEventLog {
+  id         String            @id @default(uuid(7)) @db.Uuid
+  userId     String?           @map("user_id") @db.Uuid
+  eventType  SecurityEventType @map("event_type")
+  ipAddress  String?           @map("ip_address") @db.VarChar(45)
+  occurredAt DateTime          @default(now()) @map("occurred_at")
+  details    String?           @db.VarChar(500)
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId, occurredAt])
+  @@map("security_event_logs")
+}
+
+model ContentVersion {
+  id               String   @id @default(uuid(7)) @db.Uuid
+  entityType       String   @map("entity_type") @db.VarChar(50)
+  entityId         String   @map("entity_id") @db.Uuid
+  versionNumber    Int      @map("version_number")
+  statusAtSnapshot String   @map("status_at_snapshot") @db.VarChar(30)
+  fullSnapshot     Json     @map("full_snapshot")
+  changeSummary    String?  @map("change_summary") @db.VarChar(500)
+  changedBy        String   @map("changed_by") @db.Uuid
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  changer        User            @relation(fields: [changedBy], references: [id], onDelete: Restrict)
+  auditEntries   AuditLogEntry[]
+
+  @@unique([entityType, entityId, versionNumber])
+  @@map("content_versions")
+}
+
+model DraftRevision {
+  id            String   @id @default(uuid(7)) @db.Uuid
+  entityType    String   @map("entity_type") @db.VarChar(50)
+  entityId      String   @map("entity_id") @db.Uuid
+  revisionNumber Int     @map("revision_number")
+  fullSnapshot  Json     @map("full_snapshot")
+  changedBy     String   @map("changed_by") @db.Uuid
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  changer User @relation(fields: [changedBy], references: [id], onDelete: Restrict)
+
+  @@unique([entityType, entityId, revisionNumber])
+  @@map("draft_revisions")
+}
+
+model AICitationLog {
+  id                  String   @id @default(uuid(7)) @db.Uuid
+  citedEntityType     String   @map("cited_entity_type") @db.VarChar(50)
+  citedEntityId       String   @map("cited_entity_id") @db.Uuid
+  citedContentVersion Int      @map("cited_content_version")
+  queryContextHash    String?  @map("query_context_hash") @db.VarChar(100)
+  citedAt             DateTime @default(now()) @map("cited_at")
+
+  @@index([citedEntityType, citedEntityId])
+  @@map("ai_citation_logs")
+}
+
+// ============================================================
+// STAGE 4.11 — System
+// Database Logical Design §2.13
+//
+// ملاحظة تفسير: بنفس منطق AICitationLog أعلاه، جدول Search (نطاق مستقل
+// رقم 10 من 13) لم يُخصَّص له مرحلة منفصلة ضمن المراحل الـ11 المطلوبة؛
+// وُضع SearchIndexQueue هنا ضمن System لطبيعته التشغيلية/البنيوية
+// المشتركة مع بقية جداول هذه المرحلة.
+//
+// Interpretation note: by the same logic as AICitationLog above, the
+// Search domain (its own domain #10 of 13) wasn't allocated a separate
+// stage among the 11 requested. SearchIndexQueue is placed here under
+// System given its shared operational/infrastructural nature with the
+// rest of this stage's tables.
+// ============================================================
+
+model SystemSetting {
+  id           String  @id @default(uuid(7)) @db.Uuid
+  settingKey   String  @unique @map("setting_key") @db.VarChar(100)
+  settingValue String  @map("setting_value") @db.VarChar(1000)
+  description  String? @db.VarChar(300)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("system_settings")
+}
+
+model FeatureFlag {
+  id                 String  @id @default(uuid(7)) @db.Uuid
+  flagKey            String  @unique @map("flag_key") @db.VarChar(100)
+  isEnabled          Boolean @default(false) @map("is_enabled")
+  rolloutPercentage  Int?    @default(0) @map("rollout_percentage")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("feature_flags")
+}
+
+enum BackgroundJobStatus {
+  RUNNING
+  SUCCEEDED
+  FAILED
+}
+
+model BackgroundJobLog {
+  id           String              @id @default(uuid(7)) @db.Uuid
+  jobType      String              @map("job_type") @db.VarChar(100)
+  startedAt    DateTime            @default(now()) @map("started_at")
+  finishedAt   DateTime?           @map("finished_at")
+  status       BackgroundJobStatus @default(RUNNING)
+  errorMessage String?             @map("error_message") @db.VarChar(1000)
+
+  @@index([status, startedAt])
+  @@map("background_job_logs")
+}
+
+enum SearchOperation {
+  INDEX
+  UPDATE
+  REMOVE
+}
+
+enum SearchQueueStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model SearchIndexQueue {
+  id          String            @id @default(uuid(7)) @db.Uuid
+  entityType  String            @map("entity_type") @db.VarChar(50)
+  entityId    String            @map("entity_id") @db.Uuid
+  operation   SearchOperation
+  enqueuedAt  DateTime          @default(now()) @map("enqueued_at")
+  processedAt DateTime?         @map("processed_at")
+  status      SearchQueueStatus @default(PENDING)
+  retryCount  Int               @default(0) @map("retry_count")
+
+  @@index([status, enqueuedAt])
+  @@map("search_index_queue")
+}

@@ -1,0 +1,980 @@
+{
+  "system": {
+    "loading": "جارٍ التحميل...",
+    "error": "حدث خطأ ما",
+    "retry": "إعادة المحاولة",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "language": "اللغة",
+    "theme": {
+      "label": "المظهر",
+      "light": "فاتح",
+      "dark": "داكن",
+      "system": "حسب النظام"
+    }
+  },
+  "nav": {
+    "about": "عن الإسلام",
+    "quran": "القرآن",
+    "hadith": "السنة",
+    "fiqh": "الفقه",
+    "learning": "التعليم",
+    "community": "المجتمع",
+    "dailyTools": "الأدوات اليومية",
+    "signIn": "تسجيل الدخول",
+    "articles": "المقالات"
+  },
+  "home": {
+    "hero": {
+      "title": "مرجعك الموثوق للتعرّف على الإسلام وتعلّم علومه",
+      "description": "منصة عالمية تجمع القرآن الكريم والسنة النبوية والفقه والتعليم الإسلامي بمصداقية علمية، بلغات متعددة، وبإشراف شرعي معتمَد.",
+      "searchPlaceholder": "ابحث في القرآن، الحديث، المقالات، الدورات...",
+      "searchLabel": "بحث شامل",
+      "ctaLearn": "ابدأ التعلّم",
+      "ctaQuran": "تصفّح القرآن",
+      "ctaHadith": "تصفّح الحديث"
+    },
+    "quickAccess": {
+      "title": "الوصول السريع",
+      "quran": "القرآن الكريم",
+      "hadith": "الحديث الشريف",
+      "tafsir": "التفسير",
+      "fatwa": "الفتاوى",
+      "articles": "المقالات",
+      "courses": "الدورات",
+      "books": "الكتب",
+      "scholars": "العلماء"
+    },
+    "featured": {
+      "title": "محتوى مختار",
+      "description": "مقالات ودروس اختارها فريقنا العلمي لهذا الأسبوع",
+      "viewAll": "عرض الكل",
+      "readMore": "اقرأ المزيد"
+    },
+    "learning": {
+      "title": "مسارات التعلّم",
+      "description": "مسارات تعليمية متدرجة تناسب مستواك واهتمامك، من الأساسيات إلى التعمّق العلمي.",
+      "lessonsCount": "{count} درس",
+      "viewPath": "ابدأ المسار"
+    },
+    "stats": {
+      "title": "المنصة بالأرقام",
+      "books": "كتاب",
+      "articles": "مقالة",
+      "lessons": "درس",
+      "languages": "لغة"
+    },
+    "latest": {
+      "title": "آخر الإضافات",
+      "viewAll": "عرض الكل"
+    },
+    "ai": {
+      "badge": "قريبًا",
+      "title": "مساعدك الذكي للإجابة عن أسئلتك الشرعية",
+      "description": "مساعد ذكاء اصطناعي يجيب عن أسئلتك مع الإحالة الدائمة إلى مصدرها العلمي (آية، حديث، فتوى)، ويحوّل الأسئلة الفقهية الدقيقة إلى هيئة الإفتاء البشرية مباشرة.",
+      "cta": "جرّب المساعد الذكي"
+    },
+    "cta": {
+      "title": "ابدأ رحلتك المعرفية اليوم",
+      "description": "أنشئ حسابًا مجانيًا لحفظ تقدُّمك، وتخصيص مسارك التعليمي، والانضمام إلى مجتمع عالمي من طلبة العلم.",
+      "button": "إنشاء حساب مجاني",
+      "secondaryButton": "لديّ حساب بالفعل"
+    }
+  },
+  "search": {
+    "title": "البحث الشامل",
+    "placeholder": "ابحث في القرآن، الحديث، الفتاوى، المقالات...",
+    "label": "بحث شامل في المنصة",
+    "submit": "بحث",
+    "resultsCount": "{count} نتيجة",
+    "resultsFor": "نتائج البحث عن",
+    "suggestions": "اقتراحات",
+    "filters": {
+      "title": "تصفية النتائج",
+      "clearAll": "مسح الكل",
+      "types": {
+        "quran": "القرآن",
+        "hadith": "الحديث",
+        "tafsir": "التفسير",
+        "fatwa": "الفتاوى",
+        "article": "المقالات",
+        "book": "الكتب",
+        "course": "الدورات",
+        "video": "الفيديو",
+        "audio": "الصوتيات"
+      }
+    },
+    "empty": {
+      "title": "لا توجد نتائج مطابقة",
+      "description": "جرّب كلمات مفتاحية مختلفة، أو قلّل عدد التصفيات المُطبَّقة.",
+      "clearFilters": "مسح التصفيات"
+    },
+    "history": {
+      "title": "عمليات بحث سابقة",
+      "clear": "مسح السجل"
+    },
+    "trending": {
+      "title": "الأكثر بحثًا"
+    },
+    "startPrompt": {
+      "title": "ابحث في مكتبة المعرفة الإسلامية",
+      "description": "اكتب كلمة أو عبارة، أو اختر من عمليات البحث السابقة أو الأكثر رواجًا أدناه."
+    }
+  },
+  "footer": {
+    "about": "عن المنصة",
+    "aboutUs": "من نحن",
+    "scholarBoard": "هيئة الإشراف الشرعي",
+    "partners": "الشراكات",
+    "careers": "وظائف",
+    "content": "المحتوى",
+    "resources": "الموارد",
+    "library": "المكتبة",
+    "dailyTools": "الأدوات اليومية",
+    "support": "الدعم",
+    "helpCenter": "مركز المساعدة",
+    "contactUs": "تواصل معنا",
+    "privacyPolicy": "سياسة الخصوصية",
+    "termsOfService": "الشروط والأحكام",
+    "donate": "تبرّع الآن",
+    "rights": "جميع الحقوق محفوظة"
+  },
+  "quran": {
+    "title": "القرآن الكريم",
+    "description": "تصفَّح سور القرآن الكريم الـ114، مع الوصول لاحقًا للتفسير والترجمات والتلاوات.",
+    "searchPlaceholder": "ابحث باسم السورة (عربي أو إنجليزي)...",
+    "searchLabel": "بحث في فهرس السور",
+    "resultsCount": "{count} سورة",
+    "verseCountLabel": "{count} آية",
+    "readSurah": "قراءة السورة",
+    "filters": {
+      "title": "تصفية حسب النوع",
+      "meccan": "مكية",
+      "medinan": "مدنية",
+      "clearAll": "مسح الكل"
+    },
+    "empty": {
+      "title": "لا توجد سورة مطابقة",
+      "description": "جرّب اسمًا مختلفًا أو عدِّل التصفية المُطبَّقة."
+    },
+    "details": {
+      "versesTitle": "الآيات",
+      "recitationTitle": "الاستماع إلى التلاوة",
+      "selectReciter": "اختر القارئ",
+      "recitationPlaceholder": "سيتوفر تشغيل التلاوة الصوتية هنا لاحقًا",
+      "playRecitation": "تشغيل التلاوة",
+      "previousSurah": "السورة السابقة",
+      "nextSurah": "السورة التالية",
+      "fontSize": "حجم الخط",
+      "placeholderNotice": "نص الآيات أدناه نائب مؤقت للعرض فقط، وسيُستبدَل بالنص القرآني المعتمَد عند اكتمال الاستيراد الرسمي."
+    },
+    "verse": {
+      "tafsir": "التفسير",
+      "tafsirPlaceholder": "سيظهر هنا نص التفسير المعتمَد من العلماء لهذه الآية.",
+      "translation": "الترجمة",
+      "translationPlaceholder": "ستظهر هنا ترجمة معنى هذه الآية بلغتك المختارة.",
+      "play": "استماع",
+      "copy": "نسخ",
+      "copied": "تم النسخ",
+      "share": "مشاركة",
+      "bookmark": "إضافة إشارة مرجعية",
+      "bookmarkRemove": "إزالة الإشارة المرجعية",
+      "ariaLabel": "الآية {number}"
+    }
+  },
+  "hadith": {
+    "title": "السنة النبوية",
+    "description": "تصفَّح كتب الحديث الستة المعتمَدة، مع سلاسل الإسناد ودرجة كل حديث.",
+    "searchPlaceholder": "ابحث باسم الكتاب أو المُصنِّف...",
+    "searchLabel": "بحث في فهرس كتب الحديث",
+    "resultsCount": "{count} كتاب",
+    "hadithCountLabel": "{count} حديث",
+    "browseCollection": "تصفّح الكتاب",
+    "grade": {
+      "title": "تصفية حسب الدرجة",
+      "SAHIH": "صحيح",
+      "HASAN": "حسن",
+      "DAIF": "ضعيف",
+      "clearAll": "مسح الكل"
+    },
+    "empty": {
+      "title": "لا نتائج مطابقة",
+      "description": "جرّب كلمة مختلفة أو عدِّل التصفية المُطبَّقة.",
+      "clearFilters": "مسح التصفيات"
+    },
+    "collection": {
+      "hadithsTitle": "الأحاديث",
+      "compiler": "المُصنِّف",
+      "era": "الحقبة",
+      "searchPlaceholder": "ابحث ضمن أحاديث هذا الكتاب..."
+    },
+    "card": {
+      "chainTitle": "سلسلة الإسناد",
+      "source": "مصدر التخريج",
+      "commentary": "شرح العلماء",
+      "commentaryPlaceholder": "سيظهر هنا شرح العلماء المعتمَد لهذا الحديث.",
+      "copy": "نسخ",
+      "copied": "تم النسخ",
+      "share": "مشاركة",
+      "bookmark": "إضافة إشارة مرجعية",
+      "bookmarkRemove": "إزالة الإشارة المرجعية",
+      "ariaLabel": "الحديث رقم {number}",
+      "placeholderNotice": "متن الحديث أدناه نائب مؤقت للعرض فقط، وسيُستبدَل بالنص المعتمَد عند اكتمال الاستيراد الرسمي."
+    }
+  },
+  "content": {
+    "list": {
+      "title": "المقالات",
+      "description": "مقالات معرفية في التفسير والفقه والسيرة والتزكية، بمراجعة علمية معتمَدة.",
+      "searchPlaceholder": "ابحث في عنوان المقالة...",
+      "searchLabel": "بحث في المقالات",
+      "resultsCount": "{count} مقالة",
+      "readMore": "اقرأ المزيد"
+    },
+    "meta": {
+      "readingTime": "{count} دقائق قراءة",
+      "publishedOn": "نُشر في {date}",
+      "updatedOn": "آخر تحديث: {date}"
+    },
+    "toc": {
+      "title": "محتويات المقالة"
+    },
+    "related": {
+      "title": "محتوى ذو صلة"
+    },
+    "tags": {
+      "title": "الوسوم"
+    },
+    "citations": {
+      "title": "مصادر مُستشهَد بها"
+    },
+    "comments": {
+      "title": "التعليقات",
+      "placeholder": "نظام التعليقات قيد التطوير — سيتيح لاحقًا نقاشًا مُشرَفًا عليه حول هذا المحتوى.",
+      "disabled": "غير مُفعَّل حاليًا"
+    },
+    "actions": {
+      "share": "مشاركة",
+      "copyLink": "نسخ الرابط",
+      "linkCopied": "تم نسخ الرابط",
+      "bookmark": "إضافة إشارة مرجعية",
+      "bookmarkRemove": "إزالة الإشارة المرجعية"
+    },
+    "empty": {
+      "title": "لا توجد نتائج",
+      "description": "جرّب كلمة بحث مختلفة."
+    },
+    "breadcrumbHome": "الرئيسية"
+  },
+  "academy": {
+    "catalog": {
+      "title": "الأكاديمية الإسلامية",
+      "description": "مسارات تعليمية متدرجة، من أساسيات الإسلام إلى التعمّق العلمي، بإشراف معلّمين معتمَدين.",
+      "searchPlaceholder": "ابحث عن دورة...",
+      "searchLabel": "بحث في الدورات",
+      "resultsCount": "{count} دورة",
+      "level": {
+        "title": "المستوى",
+        "clearAll": "مسح الكل"
+      },
+      "empty": {
+        "title": "لا توجد دورات مطابقة",
+        "description": "جرّب كلمة بحث مختلفة أو عدِّل التصفية."
+      }
+    },
+    "card": {
+      "lessonsCount": "{count} درس",
+      "duration": "المدة: {duration}",
+      "instructor": "المدرّس: {name}"
+    },
+    "course": {
+      "aboutTitle": "عن الدورة",
+      "objectivesTitle": "أهداف الدورة",
+      "requirementsTitle": "المتطلبات",
+      "curriculumTitle": "محتوى الدورة",
+      "instructorTitle": "المدرّس",
+      "startLearning": "ابدأ التعلّم",
+      "comingSoonNotice": "هذه الدورة قيد الإعداد وستكون متاحة قريبًا.",
+      "relatedContentTitle": "محتوى مرتبط"
+    },
+    "lesson": {
+      "videoPlaceholder": "سيتوفر تشغيل الفيديو هنا لاحقًا",
+      "noVideo": "درس نصي بلا فيديو",
+      "attachmentsTitle": "الملفات المرفقة",
+      "noAttachments": "لا توجد ملفات مرفقة لهذا الدرس",
+      "download": "تنزيل (قريبًا)",
+      "continueButton": "متابعة التعلّم",
+      "markComplete": "إتمام الدرس",
+      "previousLesson": "الدرس السابق",
+      "nextLesson": "الدرس التالي",
+      "lessonOf": "الدرس {current} من {total}",
+      "durationMinutes": "{count} دقيقة"
+    },
+    "progress": {
+      "label": "نسبة الإنجاز",
+      "lessonsCompleted": "{completed} من {total} دروس"
+    },
+    "completion": {
+      "notStarted": "لم يُبدَأ",
+      "inProgress": "قيد التقدُّم",
+      "completed": "مكتمل"
+    },
+    "dashboard": {
+      "title": "تعلّمي",
+      "recentLessons": {
+        "title": "آخر الدروس",
+        "empty": "لم تبدأ أي درس بعد"
+      },
+      "enrolledCourses": {
+        "title": "الدورات المسجَّلة",
+        "empty": "لم تسجَّل في أي دورة بعد"
+      },
+      "completionRate": {
+        "title": "نسبة الإنجاز الإجمالية"
+      },
+      "certificates": {
+        "title": "الشهادات",
+        "placeholder": "ستظهر هنا شهاداتك عند إتمام الدورات — هذه الميزة قيد التطوير."
+      },
+      "resume": "استئناف"
+    }
+  },
+  "admin": {
+    "nav": {
+      "dashboard": "لوحة المعلومات",
+      "quran": "القرآن",
+      "hadith": "الحديث",
+      "articles": "المقالات",
+      "fatwas": "الفتاوى",
+      "books": "الكتب",
+      "lessons": "الدروس",
+      "courses": "الدورات",
+      "media": "مكتبة الوسائط",
+      "users": "المستخدمون",
+      "roles": "الأدوار",
+      "permissions": "الصلاحيات",
+      "activityLog": "سجل النشاط",
+      "languages": "اللغات",
+      "translations": "الترجمات",
+      "settings": "الإعدادات",
+      "reports": "التقارير",
+      "backToSite": "العودة للموقع",
+      "news": "الأخبار"
+    },
+    "dashboard": {
+      "title": "لوحة المعلومات",
+      "description": "نظرة عامة على حالة المنصة والمحتوى والنشاط الأخير."
+    },
+    "stats": {
+      "totalContent": "إجمالي المحتويات",
+      "publishedArticles": "المقالات المنشورة",
+      "lessons": "الدروس",
+      "courses": "الدورات",
+      "users": "المستخدمون"
+    },
+    "activity": {
+      "title": "آخر النشاطات",
+      "viewAll": "عرض الكل",
+      "empty": "لا يوجد نشاط حديث",
+      "actions": {
+        "CREATE": "أنشأ",
+        "UPDATE": "عدَّل",
+        "APPROVE": "اعتمد",
+        "DELETE": "حذف",
+        "PUBLISH": "نشر"
+      }
+    },
+    "review": {
+      "title": "المحتوى قيد المراجعة",
+      "viewAll": "عرض الكل",
+      "empty": "لا يوجد محتوى قيد المراجعة",
+      "submittedBy": "بواسطة {name}",
+      "stage": {
+        "REVIEW": "مراجعة أولية",
+        "SCHOLARLY_REVIEW": "مراجعة علمية"
+      }
+    },
+    "notifications": {
+      "title": "إشعارات النظام",
+      "empty": "لا توجد إشعارات جديدة"
+    },
+    "status": {
+      "DRAFT": "مسودة",
+      "REVIEW": "قيد المراجعة",
+      "SCHOLARLY_REVIEW": "مراجعة علمية",
+      "PUBLISHED": "منشور",
+      "ARCHIVED": "مؤرشف"
+    },
+    "dataTable": {
+      "searchPlaceholder": "بحث...",
+      "searchLabel": "بحث في الجدول",
+      "filtersTitle": "التصفية",
+      "resultsCount": "{count} نتيجة",
+      "selectedCount": "{count} محدَّد",
+      "clearSelection": "إلغاء التحديد",
+      "selectAll": "تحديد الكل",
+      "createNew": "إنشاء جديد",
+      "clearFilters": "مسح التصفيات",
+      "noResults": {
+        "title": "لا توجد نتائج مطابقة",
+        "description": "جرّب كلمة بحث مختلفة أو عدِّل التصفية المُطبَّقة."
+      },
+      "error": {
+        "title": "تعذَّر تحميل البيانات",
+        "description": "حدث خطأ غير متوقَّع. حاول مرة أخرى.",
+        "retry": "إعادة المحاولة"
+      },
+      "loading": "جارٍ التحميل...",
+      "actions": {
+        "title": "الإجراءات",
+        "view": "عرض",
+        "edit": "تعديل",
+        "editComingSoon": "محرر المحتوى قيد الإنشاء (المرحلة القادمة)",
+        "submitForReview": "إرسال للمراجعة",
+        "approveScholarly": "اعتماد علمي",
+        "publish": "نشر",
+        "archive": "أرشفة",
+        "statusChanged": "تم تغيير الحالة إلى: {status}"
+      },
+      "bulk": {
+        "archiveSelected": "أرشفة المحدَّد",
+        "publishSelected": "نشر المحدَّد",
+        "bulkActionApplied": "تم تطبيق الإجراء على {count} عنصر"
+      },
+      "sort": {
+        "ascending": "تصاعدي",
+        "descending": "تنازلي"
+      }
+    },
+    "quran": {
+      "title": "إدارة القرآن الكريم",
+      "description": "إدارة سجلات الترجمة والتفسير لكل آية — النص العربي الثابت للمصحف بيانات مرجعية غير قابلة للتعديل من هنا.",
+      "columns": {
+        "surah": "السورة",
+        "verse": "رقم الآية",
+        "type": "النوع",
+        "language": "اللغة",
+        "status": "الحالة",
+        "lastModified": "آخر تعديل",
+        "lastReviewer": "آخر مراجع",
+        "noReviewer": "—"
+      },
+      "type": {
+        "TRANSLATION": "ترجمة",
+        "TAFSIR": "تفسير"
+      },
+      "filters": {
+        "status": "الحالة",
+        "language": "اللغة",
+        "type": "النوع"
+      }
+    },
+    "hadith": {
+      "title": "إدارة السنة النبوية",
+      "description": "إدارة سجلات ترجمة الحديث لكل لغة — المتن والدرجة وسلسلة الإسناد بيانات مرجعية غير قابلة للتعديل من هنا.",
+      "columns": {
+        "hadithNumber": "رقم الحديث",
+        "collection": "الكتاب",
+        "chapter": "الباب",
+        "narrator": "الراوي",
+        "grade": "الدرجة",
+        "language": "اللغة",
+        "status": "الحالة",
+        "lastReviewed": "آخر مراجعة",
+        "noReview": "لم تُراجَع بعد"
+      },
+      "filters": {
+        "collection": "الكتاب",
+        "narrator": "الراوي",
+        "grade": "الدرجة",
+        "language": "اللغة",
+        "status": "الحالة"
+      }
+    },
+    "content": {
+      "titleFor": "إدارة {kind}",
+      "description": "إدارة سجلات هذا النوع من المحتوى عبر لغاته المختلفة وحالة نشره.",
+      "columns": {
+        "title": "العنوان",
+        "author": "الكاتب",
+        "category": "التصنيف",
+        "language": "اللغة",
+        "status": "حالة النشر",
+        "lastModified": "آخر تعديل",
+        "citations": "المراجع",
+        "noCitations": "بلا مراجع"
+      },
+      "filters": {
+        "kind": "نوع المحتوى",
+        "category": "التصنيف",
+        "language": "اللغة",
+        "status": "حالة النشر",
+        "author": "المؤلف"
+      }
+    },
+    "editor": {
+      "titlePlaceholder": "عنوان المحتوى...",
+      "excerptLabel": "الملخص",
+      "excerptPlaceholder": "ملخَّص قصير للمحتوى...",
+      "categoryLabel": "التصنيف",
+      "authorLabel": "المؤلف",
+      "languageLabel": "اللغة",
+      "statusLabel": "حالة النشر",
+      "tagsLabel": "الوسوم",
+      "tagsPlaceholder": "أضف وسمًا واضغط Enter...",
+      "blocksTitle": "محتوى الكتل",
+      "addBlock": "إضافة كتلة",
+      "moveUp": "نقل لأعلى",
+      "moveDown": "نقل لأسفل",
+      "deleteBlock": "حذف الكتلة",
+      "emptyBlocks": "لا توجد كتل بعد — ابدأ بإضافة كتلة من الأسفل.",
+      "blockTypes": {
+        "paragraph": "فقرة",
+        "heading": "عنوان",
+        "quote": "اقتباس",
+        "citation": "استشهاد",
+        "quranVerse": "آية قرآنية",
+        "hadith": "حديث",
+        "image": "صورة",
+        "video": "فيديو",
+        "audio": "صوت",
+        "table": "جدول",
+        "list": "قائمة",
+        "divider": "فاصل",
+        "callout": "تنبيه"
+      },
+      "fields": {
+        "text": "النص",
+        "attribution": "المصدر/القائل",
+        "level": "المستوى",
+        "label": "التسمية",
+        "sourceType": "نوع المصدر",
+        "href": "الرابط",
+        "reference": "المرجع (مثال: 2:153)",
+        "grade": "الدرجة",
+        "altText": "نص بديل",
+        "caption": "التعليق",
+        "title": "العنوان",
+        "headers": "رؤوس الأعمدة (مفصولة بفاصلة)",
+        "rows": "الصفوف (كل صف في سطر، والخلايا مفصولة بفاصلة)",
+        "ordered": "قائمة مرقَّمة",
+        "items": "العناصر (كل عنصر في سطر)",
+        "variant": "النوع"
+      },
+      "uploadPlaceholder": {
+        "image": "رفع صورة (قريبًا)",
+        "video": "رفع فيديو (قريبًا)",
+        "audio": "رفع ملف صوتي (قريبًا)"
+      },
+      "sidebar": {
+        "propertiesTitle": "خصائص المحتوى",
+        "seoTitle": "تحسين محركات البحث (SEO)",
+        "ogTitle": "Open Graph",
+        "seoMetaTitle": "عنوان SEO",
+        "seoMetaDescription": "وصف SEO",
+        "ogTitleField": "عنوان Open Graph",
+        "ogDescription": "وصف Open Graph",
+        "canonicalUrl": "الرابط الأساسي (Canonical URL)",
+        "slug": "المعرِّف النصي (Slug)",
+        "publishDate": "تاريخ النشر",
+        "languageSettings": "إعدادات اللغة",
+        "reviewStatusTitle": "حالة المراجعة"
+      },
+      "reviewStatus": {
+        "NOT_SUBMITTED": "لم تُرسَل للمراجعة",
+        "PENDING": "قيد الانتظار",
+        "APPROVED": "مُعتمَدة",
+        "REJECTED": "مرفوضة"
+      },
+      "workflow": {
+        "title": "سير العمل",
+        "transitionTo": "الانتقال إلى: {status}"
+      },
+      "autosave": {
+        "saving": "جارٍ الحفظ...",
+        "saved": "تم الحفظ",
+        "unsaved": "تغييرات غير محفوظة"
+      },
+      "mode": {
+        "edit": "تحرير",
+        "preview": "معاينة"
+      },
+      "saveDraft": "حفظ كمسودة",
+      "saveDraftNotice": "تم حفظ المسودة محليًا فقط (لا حفظ حقيقي في هذه المرحلة).",
+      "backToList": "العودة للقائمة"
+    },
+    "media": {
+      "title": "مكتبة الوسائط",
+      "description": "إدارة الصور والصوتيات والفيديو والمستندات المستخدَمة عبر المنصة.",
+      "searchPlaceholder": "ابحث بالاسم أو الوسم...",
+      "searchLabel": "بحث في مكتبة الوسائط",
+      "resultsCount": "{count} عنصر",
+      "view": {
+        "grid": "عرض شبكي",
+        "list": "عرض قائمة"
+      },
+      "upload": {
+        "button": "رفع ملف",
+        "title": "رفع ملف جديد",
+        "description": "اسحب الملفات وأفلتها هنا، أو اختر من جهازك — واجهة فقط، بلا رفع فعلي.",
+        "dragDrop": "اسحب الملفات هنا",
+        "browseFiles": "أو اختر من جهازك",
+        "simulateUpload": "محاكاة الرفع",
+        "uploading": "جارٍ الرفع...",
+        "success": "تم الرفع بنجاح (محاكاة)",
+        "failed": "فشل الرفع (محاكاة)",
+        "cancel": "إلغاء",
+        "retry": "إعادة المحاولة",
+        "close": "إغلاق"
+      },
+      "filters": {
+        "type": "النوع",
+        "uploader": "الرافع",
+        "tags": "الوسوم"
+      },
+      "columns": {
+        "name": "الاسم",
+        "type": "النوع",
+        "size": "الحجم",
+        "dimensions": "الأبعاد",
+        "duration": "المدة",
+        "uploadedAt": "تاريخ الرفع",
+        "uploadedBy": "الرافع",
+        "usage": "الاستخدامات"
+      },
+      "types": {
+        "image": "صورة",
+        "audio": "صوت",
+        "video": "فيديو",
+        "document": "مستند"
+      },
+      "details": {
+        "title": "تفاصيل الوسائط",
+        "altText": "النص البديل (Alt Text)",
+        "caption": "التعليق (Caption)",
+        "description": "الوصف",
+        "tags": "الوسوم",
+        "usedIn": "مُستخدَم في",
+        "noUsage": "غير مُستخدَم في أي محتوى حاليًا",
+        "copyLink": "نسخ الرابط",
+        "linkCopied": "تم نسخ الرابط",
+        "close": "إغلاق التفاصيل",
+        "noAltText": "بلا نص بديل",
+        "noCaption": "بلا تعليق"
+      },
+      "picker": {
+        "title": "اختيار من مكتبة الوسائط",
+        "description": "اختر عنصرًا لإدراجه في المحتوى.",
+        "select": "اختيار",
+        "selected": "تم الاختيار",
+        "openPicker": "اختيار من المكتبة"
+      },
+      "empty": {
+        "title": "لا توجد عناصر مطابقة",
+        "description": "جرّب كلمة بحث مختلفة أو عدِّل التصفية."
+      }
+    },
+    "userStatus": {
+      "ACTIVE": "نشط",
+      "SUSPENDED": "موقوف",
+      "PENDING": "قيد الانتظار",
+      "LOCKED": "مقفَل"
+    },
+    "users": {
+      "title": "إدارة المستخدمين",
+      "description": "إدارة حسابات المستخدمين وأدوارهم وحالتهم.",
+      "searchPlaceholder": "ابحث بالاسم أو البريد الإلكتروني...",
+      "searchLabel": "بحث في المستخدمين",
+      "resultsCount": "{count} مستخدم",
+      "filters": {
+        "role": "الدور",
+        "status": "الحالة"
+      },
+      "columns": {
+        "name": "الاسم",
+        "email": "البريد الإلكتروني",
+        "role": "الدور",
+        "status": "الحالة",
+        "lastLogin": "آخر تسجيل دخول",
+        "createdAt": "تاريخ الإنشاء",
+        "neverLoggedIn": "لم يسجّل الدخول بعد"
+      },
+      "bulk": {
+        "suspendSelected": "إيقاف المحدَّد",
+        "activateSelected": "تفعيل المحدَّد"
+      },
+      "backToList": "العودة لقائمة المستخدمين"
+    },
+    "userProfile": {
+      "personalInfo": "المعلومات الشخصية",
+      "rolesTitle": "الأدوار",
+      "inheritedPermissions": "الصلاحيات الموروثة",
+      "inheritedNotice": "مُشتَقة تلقائيًا من الدور عبر config/permissions.ts — لا تُخزَّن بشكل مستقل لكل مستخدم.",
+      "activityTitle": "سجل النشاط",
+      "authoredTitle": "المحتوى الذي أنشأه",
+      "reviewedTitle": "المحتوى الذي راجعه",
+      "noContent": "لا يوجد محتوى من هذا النوع",
+      "memberSince": "عضو منذ {date}"
+    },
+    "roles": {
+      "title": "إدارة الأدوار",
+      "description": "الأدوار السبعة المعتمَدة في المشروع، مصدرها الوحيد config/permissions.ts.",
+      "usersCount": "{count} مستخدم",
+      "permissionsLevel": "{count} صلاحية",
+      "viewUsers": "عرض المستخدمين"
+    },
+    "permissionsMatrix": {
+      "title": "مصفوفة الصلاحيات",
+      "description": "عرض بصري مباشر لمحتوى config/permissions.ts — لا تعريف مستقل لأي صلاحية هنا.",
+      "permissionColumn": "الصلاحية",
+      "sourceNotice": "كل خلية أدناه نتيجة مباشرة لدالة hasPermission() من config/permissions.ts.",
+      "allowed": "مسموح",
+      "notAllowed": "غير مسموح"
+    },
+    "activityLog": {
+      "title": "سجل النشاط",
+      "description": "سجل كامل لكل الأفعال عبر المنصة.",
+      "searchPlaceholder": "ابحث بالمستخدم أو المحتوى...",
+      "searchLabel": "بحث في سجل النشاط",
+      "resultsCount": "{count} حدث",
+      "filters": {
+        "action": "العملية",
+        "result": "النتيجة",
+        "targetType": "نوع المحتوى"
+      },
+      "columns": {
+        "user": "المستخدم",
+        "action": "العملية",
+        "targetType": "نوع المحتوى",
+        "target": "العنصر",
+        "date": "التاريخ",
+        "result": "النتيجة"
+      },
+      "result": {
+        "SUCCESS": "ناجح",
+        "FAILURE": "فاشل"
+      }
+    },
+    "localization": {
+      "dashboard": {
+        "title": "إدارة الترجمات",
+        "description": "نظرة عامة على حالة الترجمة عبر كل اللغات المدعومة، مبنية مباشرة على بيانات المحتوى الموجودة.",
+        "languagesCount": "عدد اللغات",
+        "untranslatedCount": "عناصر غير مترجمة",
+        "recentTranslations": "آخر الترجمات",
+        "recentReviews": "آخر المراجعات",
+        "noRecent": "لا يوجد سجل حديث",
+        "activeLanguagesCount": "لغات نشطة"
+      },
+      "languages": {
+        "title": "إدارة اللغات",
+        "description": "اللغات المستهدَفة بالترجمة عبر المنصة — الحالة النشطة مصدرها next-intl الفعلي.",
+        "columns": {
+          "language": "اللغة",
+          "code": "الرمز",
+          "direction": "الاتجاه",
+          "status": "الحالة",
+          "completion": "نسبة الاكتمال",
+          "itemsCount": "عدد العناصر"
+        },
+        "active": "نشطة",
+        "inactive": "غير نشطة"
+      },
+      "queue": {
+        "title": "قائمة انتظار الترجمة",
+        "description": "محتوى لم يصل بعد لحالة النشر في لغته الهدف.",
+        "searchPlaceholder": "ابحث بالعنوان...",
+        "searchLabel": "بحث في قائمة الانتظار",
+        "resultsCount": "{count} عنصر",
+        "columns": {
+          "contentType": "نوع المحتوى",
+          "title": "العنوان",
+          "sourceLanguage": "اللغة الأصلية",
+          "targetLanguage": "اللغة المطلوبة",
+          "status": "الحالة",
+          "translator": "المترجم",
+          "lastModified": "آخر تعديل",
+          "noTranslator": "غير مُسنَد"
+        },
+        "filters": {
+          "language": "اللغة",
+          "contentType": "نوع المحتوى",
+          "status": "الحالة",
+          "translator": "المترجم"
+        },
+        "contentTypes": {
+          "quran": "ترجمة قرآن",
+          "hadith": "ترجمة حديث",
+          "article": "مقالة",
+          "fatwa": "فتوى",
+          "book": "كتاب",
+          "lesson": "درس",
+          "news": "خبر"
+        }
+      },
+      "editor": {
+        "title": "محرر الترجمة",
+        "originalText": "النص الأصلي",
+        "translationText": "الترجمة",
+        "translationPlaceholder": "أدخل الترجمة هنا... (واجهة فقط، لا حفظ حقيقي)",
+        "languageInfo": "معلومات اللغة",
+        "reviewStatus": "حالة المراجعة",
+        "backToQueue": "العودة لقائمة الانتظار",
+        "saveDraft": "حفظ كمسودة",
+        "saveNotice": "تم الحفظ محليًا فقط — لا حفظ حقيقي في هذه المرحلة.",
+        "direction": "الاتجاه",
+        "code": "الرمز"
+      },
+      "progress": {
+        "missingFieldsTitle": "عناصر ناقصة",
+        "missingFieldsCount": "{count} عنصر بحالة مسودة بلا ترجمة مكتملة"
+      }
+    },
+    "settingsNav": {
+      "title": "الإعدادات",
+      "general": "عام",
+      "seo": "SEO",
+      "email": "البريد الإلكتروني",
+      "storage": "التخزين",
+      "search": "البحث",
+      "ai": "الذكاء الاصطناعي",
+      "security": "الأمان"
+    },
+    "settings": {
+      "saveChanges": "حفظ التغييرات",
+      "saveNotice": "تم الحفظ محليًا فقط — لا حفظ حقيقي في هذه المرحلة.",
+      "unsavedChanges": "تغييرات غير محفوظة",
+      "noIntegrationNotice": "واجهة فقط — لا اتصال حقيقي بأي خدمة خارجية في هذه المرحلة.",
+      "general": {
+        "title": "الإعدادات العامة",
+        "description": "معلومات الموقع الأساسية وإعدادات العرض.",
+        "siteName": "اسم الموقع",
+        "siteDescription": "الوصف",
+        "logo": "الشعار",
+        "logoPlaceholder": "رمز نائب — لا رفع حقيقي",
+        "defaultLanguage": "اللغة الافتراضية",
+        "timezone": "المنطقة الزمنية",
+        "dateFormat": "تنسيق التاريخ",
+        "maintenanceMode": "وضع الصيانة",
+        "maintenanceModeDescription": "عند التفعيل، يظهر للزوار صفحة صيانة بدل الموقع الفعلي."
+      },
+      "seo": {
+        "title": "تحسين محركات البحث (SEO)",
+        "description": "إعدادات البيانات الوصفية والمشاركة الاجتماعية والفهرسة.",
+        "metaTitle": "العنوان (Meta Title)",
+        "metaDescription": "الوصف (Meta Description)",
+        "robotsTitle": "Robots",
+        "robotsIndex": "السماح بالفهرسة (index)",
+        "robotsFollow": "السماح بمتابعة الروابط (follow)",
+        "canonical": "الرابط الأساسي (Canonical)",
+        "ogTitle": "Open Graph — العنوان",
+        "ogDescription": "Open Graph — الوصف",
+        "twitterCard": "نوع بطاقة Twitter",
+        "twitterHandle": "حساب Twitter",
+        "sitemapTitle": "خريطة الموقع (Sitemap)",
+        "sitemapEnabled": "توليد خريطة الموقع تلقائيًا"
+      },
+      "email": {
+        "title": "إعدادات البريد الإلكتروني",
+        "description": "إعدادات خادم SMTP لإرسال الرسائل — واجهة فقط، بلا اتصال حقيقي.",
+        "smtpHost": "SMTP Host",
+        "smtpPort": "المنفذ (Port)",
+        "username": "اسم المستخدم",
+        "encryption": "التشفير",
+        "senderName": "اسم المُرسِل",
+        "senderEmail": "بريد المُرسِل"
+      },
+      "storage": {
+        "title": "التخزين",
+        "description": "مزوِّدو التخزين المتاحون ومؤشرات الاستخدام — عرض فقط.",
+        "active": "المزوِّد النشط",
+        "inactive": "غير مُفعَّل",
+        "usageLabel": "{used} من {total}"
+      },
+      "search": {
+        "title": "إعدادات البحث",
+        "description": "محرك البحث والميزات المرتبطة — واجهة فقط.",
+        "fullText": "البحث النصي الكامل (Full Text)",
+        "fullTextDescription": "بحث مباشر في نص المحتوى.",
+        "faceted": "البحث متعدد الأوجه (Faceted Search)",
+        "facetedDescription": "تصفية النتائج حسب النوع والتصنيف واللغة.",
+        "openSearch": "التكامل مع OpenSearch",
+        "openSearchDescription": "محرك بحث خارجي متقدم لنتائج أسرع على نطاق واسع.",
+        "endpoint": "نقطة الاتصال (Endpoint)"
+      },
+      "ai": {
+        "title": "إعدادات الذكاء الاصطناعي",
+        "description": "مزوِّد الذكاء الاصطناعي والميزات المرتبطة — بلا أي تكامل حقيقي في هذه المرحلة.",
+        "provider": "المزوِّد",
+        "providerNone": "بلا",
+        "embeddings": "التضمينات (Embeddings)",
+        "embeddingsDescription": "تمكين البحث الدلالي عبر تمثيلات المحتوى الرقمية.",
+        "summarization": "التلخيص",
+        "summarizationDescription": "توليد ملخصات تلقائية للمحتوى الطويل.",
+        "translationAssistance": "مساعدة الترجمة",
+        "translationAssistanceDescription": "اقتراح ترجمة أولية يراجعها مترجم بشري — لا اعتماد آلي أبدًا."
+      },
+      "security": {
+        "title": "الأمان",
+        "description": "سياسات الجلسة وكلمة المرور والمراقبة.",
+        "sessionTimeout": "مهلة انتهاء الجلسة (دقائق)",
+        "passwordPolicy": "سياسة كلمة المرور",
+        "passwordMinLength": "الحد الأدنى لطول كلمة المرور",
+        "passwordRequireSymbols": "تطلّب رموزًا خاصة",
+        "mfa": "المصادقة الثنائية (MFA)",
+        "mfaDescription": "طبقة حماية إضافية عبر رمز تحقق ثانٍ.",
+        "auditLogging": "تسجيل التدقيق (Audit Logging)",
+        "auditLoggingDescription": "تسجيل كل الأفعال الحسّاسة لمراجعتها لاحقًا.",
+        "maxLoginAttempts": "الحد الأقصى لمحاولات الدخول"
+      }
+    },
+    "reportsNav": {
+      "title": "التقارير",
+      "content": "تقرير المحتوى",
+      "users": "تقرير المستخدمين",
+      "localization": "تقرير الترجمة",
+      "system": "تقرير النظام"
+    },
+    "reports": {
+      "overviewTitle": "نظرة عامة على التقارير",
+      "overviewDescription": "كل الأرقام أدناه مُشتَقَّة مباشرة من بيانات الوحدات السابقة — لا بيانات مستقلة.",
+      "content": {
+        "title": "تقرير المحتوى",
+        "description": "إحصائيات المحتوى عبر كل الأنواع، مُشتَقَّة من محرك المحتوى العام والأكاديمية والوسائط.",
+        "articles": "المقالات",
+        "lessons": "الدروس",
+        "fatwas": "الفتاوى",
+        "books": "الكتب",
+        "translations": "الترجمات",
+        "media": "الوسائط",
+        "courses": "الدورات",
+        "news": "الأخبار"
+      },
+      "users": {
+        "title": "تقرير المستخدمين",
+        "description": "نشاط المستخدمين وتوزيع الأدوار، مُشتَقّ من وحدة إدارة المستخدمين.",
+        "activeUsers": "المستخدمون النشطون",
+        "totalUsers": "إجمالي المستخدمين",
+        "roleDistribution": "توزيع الأدوار",
+        "recentLogins": "آخر تسجيلات الدخول",
+        "recentActivity": "أحدث الأنشطة"
+      },
+      "localization": {
+        "title": "تقرير الترجمة",
+        "description": "حالة اكتمال الترجمة عبر كل اللغات، مُشتَقّ من وحدة إدارة الترجمات مباشرة.",
+        "untranslatedTotal": "إجمالي العناصر غير المكتملة"
+      },
+      "system": {
+        "title": "تقرير النظام",
+        "description": "مؤشرات تشغيلية عامة — بعضها Placeholder صريح موضَّح أدناه.",
+        "storageUsed": "مساحة التخزين المُستخدَمة",
+        "memoryUsage": "استخدام الذاكرة",
+        "memoryPlaceholderNotice": "قيمة Placeholder — لا مقياس نظام تشغيل حقيقي في بيئة واجهة أمامية.",
+        "filesCount": "عدد الملفات",
+        "errorLog": "سجل الأخطاء",
+        "errorLogNotice": "مُشتَقّ من سجل النشاط الحقيقي (العمليات الفاشلة) — لا سجل أخطاء خادم حقيقي.",
+        "noErrors": "لا توجد أخطاء مسجَّلة"
+      }
+    }
+  }
+}

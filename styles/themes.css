@@ -1,0 +1,82 @@
+/**
+ * قيم الثيمات الفعلية — مطابقة حرفيًا لـ ENTERPRISE_DESIGN_SYSTEM.md §2
+ * (الهوية البصرية المعتمَدة رسميًا في Phase 7). يجب أن تطابق أسماء
+ * المتغيرات في config/themes.ts وتُربط برموز Tailwind v4 عبر @theme
+ * inline في styles/globals.css.
+ *
+ * Actual theme values — match ENTERPRISE_DESIGN_SYSTEM.md §2 verbatim
+ * (the visual identity officially approved in Phase 7). Must match the
+ * variable names in config/themes.ts and are wired to Tailwind v4
+ * tokens via @theme inline in styles/globals.css.
+ */
+
+:root {
+  --radius: 0.5rem;
+
+  --background: hsl(40 20% 99%);
+  --foreground: hsl(20 14% 10%);
+
+  /* Primary — أخضر Hue 155°، درجة 600 المرجعية (Design System §2.1) */
+  --primary: hsl(155 60% 24%);
+  --primary-foreground: hsl(0 0% 100%);
+
+  --secondary: hsl(40 25% 94%);
+  --secondary-foreground: hsl(20 14% 10%);
+
+  --muted: hsl(40 15% 94%);
+  --muted-foreground: hsl(20 6% 42%);
+
+  /* Accent — ذهبي/كهرماني Hue 42°، درجة 600 المرجعية (Design System §2.1) */
+  --accent: hsl(42 55% 42%);
+  --accent-foreground: hsl(0 0% 100%);
+
+  /* ألوان الحالة الدلالية — Design System §2.2 */
+  --success: hsl(155 55% 30%);
+  --success-foreground: hsl(0 0% 100%);
+
+  --warning: hsl(38 80% 45%);
+  --warning-foreground: hsl(20 14% 10%);
+
+  --destructive: hsl(0 65% 48%);
+  --destructive-foreground: hsl(0 0% 100%);
+
+  --info: hsl(210 60% 45%);
+  --info-foreground: hsl(0 0% 100%);
+
+  --border: hsl(40 12% 88%);
+  --input: hsl(40 12% 88%);
+  --ring: hsl(155 60% 24%);
+}
+
+.dark {
+  --background: hsl(20 14% 8%);
+  --foreground: hsl(40 15% 95%);
+
+  --primary: hsl(155 45% 45%);
+  --primary-foreground: hsl(20 14% 8%);
+
+  --secondary: hsl(20 10% 16%);
+  --secondary-foreground: hsl(40 15% 95%);
+
+  --muted: hsl(20 10% 16%);
+  --muted-foreground: hsl(40 8% 65%);
+
+  --accent: hsl(42 45% 55%);
+  --accent-foreground: hsl(20 14% 8%);
+
+  --success: hsl(155 45% 45%);
+  --success-foreground: hsl(20 14% 8%);
+
+  --warning: hsl(38 70% 55%);
+  --warning-foreground: hsl(20 14% 8%);
+
+  --destructive: hsl(0 55% 45%);
+  --destructive-foreground: hsl(0 0% 100%);
+
+  --info: hsl(210 55% 60%);
+  --info-foreground: hsl(20 14% 8%);
+
+  --border: hsl(20 10% 20%);
+  --input: hsl(20 10% 20%);
+  --ring: hsl(155 45% 45%);
+}

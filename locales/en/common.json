@@ -1,0 +1,980 @@
+{
+  "system": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel",
+    "language": "Language",
+    "theme": {
+      "label": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    }
+  },
+  "nav": {
+    "about": "Discover Islam",
+    "quran": "Quran",
+    "hadith": "Hadith",
+    "fiqh": "Fiqh",
+    "learning": "Learning",
+    "community": "Community",
+    "dailyTools": "Daily Tools",
+    "signIn": "Sign In",
+    "articles": "Articles"
+  },
+  "home": {
+    "hero": {
+      "title": "Your trusted reference for discovering Islam and its sciences",
+      "description": "A global platform bringing together the Quran, Hadith, Fiqh, and Islamic education with scholarly accuracy, in multiple languages, under certified religious supervision.",
+      "searchPlaceholder": "Search the Quran, Hadith, articles, courses...",
+      "searchLabel": "Global search",
+      "ctaLearn": "Start Learning",
+      "ctaQuran": "Browse the Quran",
+      "ctaHadith": "Browse Hadith"
+    },
+    "quickAccess": {
+      "title": "Quick Access",
+      "quran": "The Holy Quran",
+      "hadith": "Hadith",
+      "tafsir": "Tafsir",
+      "fatwa": "Fatwas",
+      "articles": "Articles",
+      "courses": "Courses",
+      "books": "Books",
+      "scholars": "Scholars"
+    },
+    "featured": {
+      "title": "Featured Content",
+      "description": "Articles and lessons curated by our scholarly team this week",
+      "viewAll": "View all",
+      "readMore": "Read more"
+    },
+    "learning": {
+      "title": "Learning Paths",
+      "description": "Progressive learning paths for every level and interest, from the basics to deep scholarly study.",
+      "lessonsCount": "{count} lessons",
+      "viewPath": "Start path"
+    },
+    "stats": {
+      "title": "The Platform in Numbers",
+      "books": "Books",
+      "articles": "Articles",
+      "lessons": "Lessons",
+      "languages": "Languages"
+    },
+    "latest": {
+      "title": "Latest Additions",
+      "viewAll": "View all"
+    },
+    "ai": {
+      "badge": "Coming soon",
+      "title": "Your AI assistant for Islamic questions",
+      "description": "An AI assistant that answers your questions while always citing its scholarly source (verse, hadith, fatwa), and routes precise fiqh questions directly to our human fatwa board.",
+      "cta": "Try the AI assistant"
+    },
+    "cta": {
+      "title": "Start your journey of knowledge today",
+      "description": "Create a free account to save your progress, personalize your learning path, and join a global community of students of knowledge.",
+      "button": "Create free account",
+      "secondaryButton": "I already have an account"
+    }
+  },
+  "search": {
+    "title": "Global Search",
+    "placeholder": "Search the Quran, Hadith, Fatwas, articles...",
+    "label": "Search the entire platform",
+    "submit": "Search",
+    "resultsCount": "{count} results",
+    "resultsFor": "Search results for",
+    "suggestions": "Suggestions",
+    "filters": {
+      "title": "Filter Results",
+      "clearAll": "Clear all",
+      "types": {
+        "quran": "Quran",
+        "hadith": "Hadith",
+        "tafsir": "Tafsir",
+        "fatwa": "Fatwas",
+        "article": "Articles",
+        "book": "Books",
+        "course": "Courses",
+        "video": "Video",
+        "audio": "Audio"
+      }
+    },
+    "empty": {
+      "title": "No matching results",
+      "description": "Try different keywords, or reduce the number of active filters.",
+      "clearFilters": "Clear filters"
+    },
+    "history": {
+      "title": "Recent searches",
+      "clear": "Clear history"
+    },
+    "trending": {
+      "title": "Trending searches"
+    },
+    "startPrompt": {
+      "title": "Search the Islamic knowledge library",
+      "description": "Type a word or phrase, or pick from your recent or trending searches below."
+    }
+  },
+  "footer": {
+    "about": "About the Platform",
+    "aboutUs": "About Us",
+    "scholarBoard": "Scholarly Board",
+    "partners": "Partnerships",
+    "careers": "Careers",
+    "content": "Content",
+    "resources": "Resources",
+    "library": "Library",
+    "dailyTools": "Daily Tools",
+    "support": "Support",
+    "helpCenter": "Help Center",
+    "contactUs": "Contact Us",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "donate": "Donate Now",
+    "rights": "All rights reserved"
+  },
+  "quran": {
+    "title": "The Holy Quran",
+    "description": "Browse all 114 surahs of the Quran, with tafsir, translations, and recitations coming later.",
+    "searchPlaceholder": "Search by surah name (Arabic or English)...",
+    "searchLabel": "Search the surah index",
+    "resultsCount": "{count} surahs",
+    "verseCountLabel": "{count} verses",
+    "readSurah": "Read Surah",
+    "filters": {
+      "title": "Filter by type",
+      "meccan": "Meccan",
+      "medinan": "Medinan",
+      "clearAll": "Clear all"
+    },
+    "empty": {
+      "title": "No matching surah",
+      "description": "Try a different name or adjust the active filter."
+    },
+    "details": {
+      "versesTitle": "Verses",
+      "recitationTitle": "Listen to Recitation",
+      "selectReciter": "Select reciter",
+      "recitationPlaceholder": "Audio recitation playback will be available here later",
+      "playRecitation": "Play recitation",
+      "previousSurah": "Previous Surah",
+      "nextSurah": "Next Surah",
+      "fontSize": "Font size",
+      "placeholderNotice": "Verse text below is a temporary display placeholder only, and will be replaced with the certified Quran text once official import is complete."
+    },
+    "verse": {
+      "tafsir": "Tafsir",
+      "tafsirPlaceholder": "The scholarly-approved tafsir for this verse will appear here.",
+      "translation": "Translation",
+      "translationPlaceholder": "A translation of this verse's meaning in your chosen language will appear here.",
+      "play": "Listen",
+      "copy": "Copy",
+      "copied": "Copied",
+      "share": "Share",
+      "bookmark": "Add bookmark",
+      "bookmarkRemove": "Remove bookmark",
+      "ariaLabel": "Verse {number}"
+    }
+  },
+  "hadith": {
+    "title": "The Prophetic Sunnah",
+    "description": "Browse the six canonical hadith collections, with narrator chains and each hadith’s grade.",
+    "searchPlaceholder": "Search by collection or compiler name...",
+    "searchLabel": "Search the hadith collection index",
+    "resultsCount": "{count} collections",
+    "hadithCountLabel": "{count} hadiths",
+    "browseCollection": "Browse Collection",
+    "grade": {
+      "title": "Filter by grade",
+      "SAHIH": "Sahih",
+      "HASAN": "Hasan",
+      "DAIF": "Da'if",
+      "clearAll": "Clear all"
+    },
+    "empty": {
+      "title": "No matching results",
+      "description": "Try a different word or adjust the active filter.",
+      "clearFilters": "Clear filters"
+    },
+    "collection": {
+      "hadithsTitle": "Hadiths",
+      "compiler": "Compiler",
+      "era": "Era",
+      "searchPlaceholder": "Search within this collection’s hadiths..."
+    },
+    "card": {
+      "chainTitle": "Chain of Narration",
+      "source": "Source",
+      "commentary": "Scholar's Commentary",
+      "commentaryPlaceholder": "The scholarly-approved commentary for this hadith will appear here.",
+      "copy": "Copy",
+      "copied": "Copied",
+      "share": "Share",
+      "bookmark": "Add bookmark",
+      "bookmarkRemove": "Remove bookmark",
+      "ariaLabel": "Hadith {number}",
+      "placeholderNotice": "The hadith text below is a temporary display placeholder only, and will be replaced with the certified text once official import is complete."
+    }
+  },
+  "content": {
+    "list": {
+      "title": "Articles",
+      "description": "Knowledge articles on Tafsir, Fiqh, Seerah, and self-development, under certified scholarly review.",
+      "searchPlaceholder": "Search article titles...",
+      "searchLabel": "Search articles",
+      "resultsCount": "{count} articles",
+      "readMore": "Read more"
+    },
+    "meta": {
+      "readingTime": "{count} min read",
+      "publishedOn": "Published on {date}",
+      "updatedOn": "Last updated: {date}"
+    },
+    "toc": {
+      "title": "Table of Contents"
+    },
+    "related": {
+      "title": "Related Content"
+    },
+    "tags": {
+      "title": "Tags"
+    },
+    "citations": {
+      "title": "Cited Sources"
+    },
+    "comments": {
+      "title": "Comments",
+      "placeholder": "The comments system is under development — it will later enable moderated discussion on this content.",
+      "disabled": "Currently disabled"
+    },
+    "actions": {
+      "share": "Share",
+      "copyLink": "Copy link",
+      "linkCopied": "Link copied",
+      "bookmark": "Add bookmark",
+      "bookmarkRemove": "Remove bookmark"
+    },
+    "empty": {
+      "title": "No results",
+      "description": "Try a different search term."
+    },
+    "breadcrumbHome": "Home"
+  },
+  "academy": {
+    "catalog": {
+      "title": "Islamic Academy",
+      "description": "Progressive learning paths, from Islam basics to deep scholarly study, under certified teachers.",
+      "searchPlaceholder": "Search for a course...",
+      "searchLabel": "Search courses",
+      "resultsCount": "{count} courses",
+      "level": {
+        "title": "Level",
+        "clearAll": "Clear all"
+      },
+      "empty": {
+        "title": "No matching courses",
+        "description": "Try a different search term or adjust the filter."
+      }
+    },
+    "card": {
+      "lessonsCount": "{count} lessons",
+      "duration": "Duration: {duration}",
+      "instructor": "Instructor: {name}"
+    },
+    "course": {
+      "aboutTitle": "About this course",
+      "objectivesTitle": "Course Objectives",
+      "requirementsTitle": "Requirements",
+      "curriculumTitle": "Course Content",
+      "instructorTitle": "Instructor",
+      "startLearning": "Start Learning",
+      "comingSoonNotice": "This course is being prepared and will be available soon.",
+      "relatedContentTitle": "Related Content"
+    },
+    "lesson": {
+      "videoPlaceholder": "Video playback will be available here later",
+      "noVideo": "Text-only lesson, no video",
+      "attachmentsTitle": "Attachments",
+      "noAttachments": "No attachments for this lesson",
+      "download": "Download (coming soon)",
+      "continueButton": "Continue Learning",
+      "markComplete": "Mark as Complete",
+      "previousLesson": "Previous Lesson",
+      "nextLesson": "Next Lesson",
+      "lessonOf": "Lesson {current} of {total}",
+      "durationMinutes": "{count} min"
+    },
+    "progress": {
+      "label": "Completion Rate",
+      "lessonsCompleted": "{completed} of {total} lessons"
+    },
+    "completion": {
+      "notStarted": "Not Started",
+      "inProgress": "In Progress",
+      "completed": "Completed"
+    },
+    "dashboard": {
+      "title": "My Learning",
+      "recentLessons": {
+        "title": "Recent Lessons",
+        "empty": "You haven't started any lesson yet"
+      },
+      "enrolledCourses": {
+        "title": "Enrolled Courses",
+        "empty": "You haven't enrolled in any course yet"
+      },
+      "completionRate": {
+        "title": "Overall Completion Rate"
+      },
+      "certificates": {
+        "title": "Certificates",
+        "placeholder": "Your certificates will appear here once you complete courses — this feature is under development."
+      },
+      "resume": "Resume"
+    }
+  },
+  "admin": {
+    "nav": {
+      "dashboard": "Dashboard",
+      "quran": "Quran",
+      "hadith": "Hadith",
+      "articles": "Articles",
+      "fatwas": "Fatwas",
+      "books": "Books",
+      "lessons": "Lessons",
+      "courses": "Courses",
+      "media": "Media Library",
+      "users": "Users",
+      "roles": "Roles",
+      "permissions": "Permissions",
+      "activityLog": "Activity Log",
+      "languages": "Languages",
+      "translations": "Translations",
+      "settings": "Settings",
+      "reports": "Reports",
+      "backToSite": "Back to Site",
+      "news": "News"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "description": "An overview of the platform, content, and recent activity."
+    },
+    "stats": {
+      "totalContent": "Total Content",
+      "publishedArticles": "Published Articles",
+      "lessons": "Lessons",
+      "courses": "Courses",
+      "users": "Users"
+    },
+    "activity": {
+      "title": "Recent Activity",
+      "viewAll": "View all",
+      "empty": "No recent activity",
+      "actions": {
+        "CREATE": "created",
+        "UPDATE": "updated",
+        "APPROVE": "approved",
+        "DELETE": "deleted",
+        "PUBLISH": "published"
+      }
+    },
+    "review": {
+      "title": "Content Under Review",
+      "viewAll": "View all",
+      "empty": "No content under review",
+      "submittedBy": "by {name}",
+      "stage": {
+        "REVIEW": "Initial Review",
+        "SCHOLARLY_REVIEW": "Scholarly Review"
+      }
+    },
+    "notifications": {
+      "title": "System Notifications",
+      "empty": "No new notifications"
+    },
+    "status": {
+      "DRAFT": "Draft",
+      "REVIEW": "In Review",
+      "SCHOLARLY_REVIEW": "Scholarly Review",
+      "PUBLISHED": "Published",
+      "ARCHIVED": "Archived"
+    },
+    "dataTable": {
+      "searchPlaceholder": "Search...",
+      "searchLabel": "Search the table",
+      "filtersTitle": "Filters",
+      "resultsCount": "{count} results",
+      "selectedCount": "{count} selected",
+      "clearSelection": "Clear selection",
+      "selectAll": "Select all",
+      "createNew": "Create New",
+      "clearFilters": "Clear filters",
+      "noResults": {
+        "title": "No matching results",
+        "description": "Try a different search term or adjust the active filter."
+      },
+      "error": {
+        "title": "Failed to load data",
+        "description": "An unexpected error occurred. Please try again.",
+        "retry": "Retry"
+      },
+      "loading": "Loading...",
+      "actions": {
+        "title": "Actions",
+        "view": "View",
+        "edit": "Edit",
+        "editComingSoon": "Content editor is under construction (upcoming phase)",
+        "submitForReview": "Submit for Review",
+        "approveScholarly": "Scholarly Approval",
+        "publish": "Publish",
+        "archive": "Archive",
+        "statusChanged": "Status changed to: {status}"
+      },
+      "bulk": {
+        "archiveSelected": "Archive Selected",
+        "publishSelected": "Publish Selected",
+        "bulkActionApplied": "Action applied to {count} item(s)"
+      },
+      "sort": {
+        "ascending": "Ascending",
+        "descending": "Descending"
+      }
+    },
+    "quran": {
+      "title": "Quran Content Management",
+      "description": "Manage per-verse translation and tafsir records — the Mushaf's fixed Arabic text is reference data and isn't editable from here.",
+      "columns": {
+        "surah": "Surah",
+        "verse": "Verse #",
+        "type": "Type",
+        "language": "Language",
+        "status": "Status",
+        "lastModified": "Last Modified",
+        "lastReviewer": "Last Reviewer",
+        "noReviewer": "—"
+      },
+      "type": {
+        "TRANSLATION": "Translation",
+        "TAFSIR": "Tafsir"
+      },
+      "filters": {
+        "status": "Status",
+        "language": "Language",
+        "type": "Type"
+      }
+    },
+    "hadith": {
+      "title": "Hadith Content Management",
+      "description": "Manage per-language hadith translation records — the matn, grade, and chain of narration are reference data and aren't editable from here.",
+      "columns": {
+        "hadithNumber": "Hadith #",
+        "collection": "Collection",
+        "chapter": "Chapter",
+        "narrator": "Narrator",
+        "grade": "Grade",
+        "language": "Language",
+        "status": "Status",
+        "lastReviewed": "Last Reviewed",
+        "noReview": "Not yet reviewed"
+      },
+      "filters": {
+        "collection": "Collection",
+        "narrator": "Narrator",
+        "grade": "Grade",
+        "language": "Language",
+        "status": "Status"
+      }
+    },
+    "content": {
+      "titleFor": "Manage {kind}",
+      "description": "Manage this content type's records across languages and publish status.",
+      "columns": {
+        "title": "Title",
+        "author": "Author",
+        "category": "Category",
+        "language": "Language",
+        "status": "Publish Status",
+        "lastModified": "Last Modified",
+        "citations": "Citations",
+        "noCitations": "No citations"
+      },
+      "filters": {
+        "kind": "Content Type",
+        "category": "Category",
+        "language": "Language",
+        "status": "Publish Status",
+        "author": "Author"
+      }
+    },
+    "editor": {
+      "titlePlaceholder": "Content title...",
+      "excerptLabel": "Excerpt",
+      "excerptPlaceholder": "A short summary of the content...",
+      "categoryLabel": "Category",
+      "authorLabel": "Author",
+      "languageLabel": "Language",
+      "statusLabel": "Publish Status",
+      "tagsLabel": "Tags",
+      "tagsPlaceholder": "Add a tag and press Enter...",
+      "blocksTitle": "Block Content",
+      "addBlock": "Add Block",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "deleteBlock": "Delete block",
+      "emptyBlocks": "No blocks yet — start by adding one below.",
+      "blockTypes": {
+        "paragraph": "Paragraph",
+        "heading": "Heading",
+        "quote": "Quote",
+        "citation": "Citation",
+        "quranVerse": "Quran Verse",
+        "hadith": "Hadith",
+        "image": "Image",
+        "video": "Video",
+        "audio": "Audio",
+        "table": "Table",
+        "list": "List",
+        "divider": "Divider",
+        "callout": "Callout"
+      },
+      "fields": {
+        "text": "Text",
+        "attribution": "Attribution",
+        "level": "Level",
+        "label": "Label",
+        "sourceType": "Source Type",
+        "href": "Link",
+        "reference": "Reference (e.g. 2:153)",
+        "grade": "Grade",
+        "altText": "Alt Text",
+        "caption": "Caption",
+        "title": "Title",
+        "headers": "Column headers (comma-separated)",
+        "rows": "Rows (one row per line, cells comma-separated)",
+        "ordered": "Ordered list",
+        "items": "Items (one per line)",
+        "variant": "Variant"
+      },
+      "uploadPlaceholder": {
+        "image": "Upload image (coming soon)",
+        "video": "Upload video (coming soon)",
+        "audio": "Upload audio (coming soon)"
+      },
+      "sidebar": {
+        "propertiesTitle": "Content Properties",
+        "seoTitle": "SEO",
+        "ogTitle": "Open Graph",
+        "seoMetaTitle": "SEO Title",
+        "seoMetaDescription": "SEO Description",
+        "ogTitleField": "Open Graph Title",
+        "ogDescription": "Open Graph Description",
+        "canonicalUrl": "Canonical URL",
+        "slug": "Slug",
+        "publishDate": "Publish Date",
+        "languageSettings": "Language Settings",
+        "reviewStatusTitle": "Review Status"
+      },
+      "reviewStatus": {
+        "NOT_SUBMITTED": "Not submitted",
+        "PENDING": "Pending",
+        "APPROVED": "Approved",
+        "REJECTED": "Rejected"
+      },
+      "workflow": {
+        "title": "Workflow",
+        "transitionTo": "Move to: {status}"
+      },
+      "autosave": {
+        "saving": "Saving...",
+        "saved": "Saved",
+        "unsaved": "Unsaved changes"
+      },
+      "mode": {
+        "edit": "Edit",
+        "preview": "Preview"
+      },
+      "saveDraft": "Save as Draft",
+      "saveDraftNotice": "Draft saved locally only (no real persistence at this phase).",
+      "backToList": "Back to list"
+    },
+    "media": {
+      "title": "Media Library",
+      "description": "Manage images, audio, video, and documents used across the platform.",
+      "searchPlaceholder": "Search by name or tag...",
+      "searchLabel": "Search the media library",
+      "resultsCount": "{count} items",
+      "view": {
+        "grid": "Grid view",
+        "list": "List view"
+      },
+      "upload": {
+        "button": "Upload File",
+        "title": "Upload a new file",
+        "description": "Drag and drop files here, or browse your device — UI only, no real upload.",
+        "dragDrop": "Drag files here",
+        "browseFiles": "or browse your device",
+        "simulateUpload": "Simulate Upload",
+        "uploading": "Uploading...",
+        "success": "Upload succeeded (simulated)",
+        "failed": "Upload failed (simulated)",
+        "cancel": "Cancel",
+        "retry": "Retry",
+        "close": "Close"
+      },
+      "filters": {
+        "type": "Type",
+        "uploader": "Uploader",
+        "tags": "Tags"
+      },
+      "columns": {
+        "name": "Name",
+        "type": "Type",
+        "size": "Size",
+        "dimensions": "Dimensions",
+        "duration": "Duration",
+        "uploadedAt": "Uploaded",
+        "uploadedBy": "Uploaded By",
+        "usage": "Usage"
+      },
+      "types": {
+        "image": "Image",
+        "audio": "Audio",
+        "video": "Video",
+        "document": "Document"
+      },
+      "details": {
+        "title": "Media Details",
+        "altText": "Alt Text",
+        "caption": "Caption",
+        "description": "Description",
+        "tags": "Tags",
+        "usedIn": "Used In",
+        "noUsage": "Not used in any content yet",
+        "copyLink": "Copy Link",
+        "linkCopied": "Link copied",
+        "close": "Close details",
+        "noAltText": "No alt text",
+        "noCaption": "No caption"
+      },
+      "picker": {
+        "title": "Select from Media Library",
+        "description": "Choose an item to insert into the content.",
+        "select": "Select",
+        "selected": "Selected",
+        "openPicker": "Select from Library"
+      },
+      "empty": {
+        "title": "No matching items",
+        "description": "Try a different search term or adjust the filter."
+      }
+    },
+    "userStatus": {
+      "ACTIVE": "Active",
+      "SUSPENDED": "Suspended",
+      "PENDING": "Pending",
+      "LOCKED": "Locked"
+    },
+    "users": {
+      "title": "User Management",
+      "description": "Manage user accounts, roles, and status.",
+      "searchPlaceholder": "Search by name or email...",
+      "searchLabel": "Search users",
+      "resultsCount": "{count} users",
+      "filters": {
+        "role": "Role",
+        "status": "Status"
+      },
+      "columns": {
+        "name": "Name",
+        "email": "Email",
+        "role": "Role",
+        "status": "Status",
+        "lastLogin": "Last Login",
+        "createdAt": "Created",
+        "neverLoggedIn": "Never logged in"
+      },
+      "bulk": {
+        "suspendSelected": "Suspend Selected",
+        "activateSelected": "Activate Selected"
+      },
+      "backToList": "Back to user list"
+    },
+    "userProfile": {
+      "personalInfo": "Personal Information",
+      "rolesTitle": "Roles",
+      "inheritedPermissions": "Inherited Permissions",
+      "inheritedNotice": "Automatically derived from the role via config/permissions.ts — never stored independently per user.",
+      "activityTitle": "Activity Log",
+      "authoredTitle": "Content Authored",
+      "reviewedTitle": "Content Reviewed",
+      "noContent": "No content of this kind",
+      "memberSince": "Member since {date}"
+    },
+    "roles": {
+      "title": "Role Management",
+      "description": "The seven roles approved in the project, sourced solely from config/permissions.ts.",
+      "usersCount": "{count} users",
+      "permissionsLevel": "{count} permissions",
+      "viewUsers": "View Users"
+    },
+    "permissionsMatrix": {
+      "title": "Permissions Matrix",
+      "description": "A direct visual view of config/permissions.ts's content — no permission is independently defined here.",
+      "permissionColumn": "Permission",
+      "sourceNotice": "Every cell below is a direct result of hasPermission() from config/permissions.ts.",
+      "allowed": "Allowed",
+      "notAllowed": "Not allowed"
+    },
+    "activityLog": {
+      "title": "Activity Log",
+      "description": "A complete log of every action across the platform.",
+      "searchPlaceholder": "Search by user or content...",
+      "searchLabel": "Search the activity log",
+      "resultsCount": "{count} events",
+      "filters": {
+        "action": "Action",
+        "result": "Result",
+        "targetType": "Content Type"
+      },
+      "columns": {
+        "user": "User",
+        "action": "Action",
+        "targetType": "Content Type",
+        "target": "Item",
+        "date": "Date",
+        "result": "Result"
+      },
+      "result": {
+        "SUCCESS": "Success",
+        "FAILURE": "Failure"
+      }
+    },
+    "localization": {
+      "dashboard": {
+        "title": "Localization Management",
+        "description": "An overview of translation status across all supported languages, built directly from existing content data.",
+        "languagesCount": "Languages",
+        "untranslatedCount": "Untranslated Items",
+        "recentTranslations": "Recent Translations",
+        "recentReviews": "Recent Reviews",
+        "noRecent": "No recent activity",
+        "activeLanguagesCount": "Active Languages"
+      },
+      "languages": {
+        "title": "Language Management",
+        "description": "Languages targeted for translation across the platform — active status is sourced from next-intl's actual configuration.",
+        "columns": {
+          "language": "Language",
+          "code": "Code",
+          "direction": "Direction",
+          "status": "Status",
+          "completion": "Completion",
+          "itemsCount": "Items"
+        },
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "queue": {
+        "title": "Translation Queue",
+        "description": "Content that hasn't yet reached published status in its target language.",
+        "searchPlaceholder": "Search by title...",
+        "searchLabel": "Search the translation queue",
+        "resultsCount": "{count} items",
+        "columns": {
+          "contentType": "Content Type",
+          "title": "Title",
+          "sourceLanguage": "Source Language",
+          "targetLanguage": "Target Language",
+          "status": "Status",
+          "translator": "Translator",
+          "lastModified": "Last Modified",
+          "noTranslator": "Unassigned"
+        },
+        "filters": {
+          "language": "Language",
+          "contentType": "Content Type",
+          "status": "Status",
+          "translator": "Translator"
+        },
+        "contentTypes": {
+          "quran": "Quran Translation",
+          "hadith": "Hadith Translation",
+          "article": "Article",
+          "fatwa": "Fatwa",
+          "book": "Book",
+          "lesson": "Lesson",
+          "news": "News"
+        }
+      },
+      "editor": {
+        "title": "Translation Editor",
+        "originalText": "Original Text",
+        "translationText": "Translation",
+        "translationPlaceholder": "Enter the translation here... (UI only, no real save)",
+        "languageInfo": "Language Info",
+        "reviewStatus": "Review Status",
+        "backToQueue": "Back to queue",
+        "saveDraft": "Save as Draft",
+        "saveNotice": "Saved locally only — no real persistence at this phase.",
+        "direction": "Direction",
+        "code": "Code"
+      },
+      "progress": {
+        "missingFieldsTitle": "Missing Items",
+        "missingFieldsCount": "{count} items in draft status without a completed translation"
+      }
+    },
+    "settingsNav": {
+      "title": "Settings",
+      "general": "General",
+      "seo": "SEO",
+      "email": "Email",
+      "storage": "Storage",
+      "search": "Search",
+      "ai": "AI",
+      "security": "Security"
+    },
+    "settings": {
+      "saveChanges": "Save Changes",
+      "saveNotice": "Saved locally only — no real persistence at this phase.",
+      "unsavedChanges": "Unsaved changes",
+      "noIntegrationNotice": "UI only — no real connection to any external service at this phase.",
+      "general": {
+        "title": "General Settings",
+        "description": "Core site information and display settings.",
+        "siteName": "Site Name",
+        "siteDescription": "Description",
+        "logo": "Logo",
+        "logoPlaceholder": "Placeholder — no real upload",
+        "defaultLanguage": "Default Language",
+        "timezone": "Timezone",
+        "dateFormat": "Date Format",
+        "maintenanceMode": "Maintenance Mode",
+        "maintenanceModeDescription": "When enabled, visitors see a maintenance page instead of the live site."
+      },
+      "seo": {
+        "title": "SEO",
+        "description": "Metadata, social sharing, and indexing settings.",
+        "metaTitle": "Meta Title",
+        "metaDescription": "Meta Description",
+        "robotsTitle": "Robots",
+        "robotsIndex": "Allow indexing",
+        "robotsFollow": "Allow following links",
+        "canonical": "Canonical URL",
+        "ogTitle": "Open Graph — Title",
+        "ogDescription": "Open Graph — Description",
+        "twitterCard": "Twitter Card Type",
+        "twitterHandle": "Twitter Handle",
+        "sitemapTitle": "Sitemap",
+        "sitemapEnabled": "Auto-generate sitemap"
+      },
+      "email": {
+        "title": "Email Settings",
+        "description": "SMTP server settings for sending mail — UI only, no real connection.",
+        "smtpHost": "SMTP Host",
+        "smtpPort": "Port",
+        "username": "Username",
+        "encryption": "Encryption",
+        "senderName": "Sender Name",
+        "senderEmail": "Sender Email"
+      },
+      "storage": {
+        "title": "Storage",
+        "description": "Available storage providers and usage indicators — display only.",
+        "active": "Active Provider",
+        "inactive": "Not enabled",
+        "usageLabel": "{used} of {total}"
+      },
+      "search": {
+        "title": "Search Settings",
+        "description": "Search engine and related features — UI only.",
+        "fullText": "Full Text Search",
+        "fullTextDescription": "Direct search across content text.",
+        "faceted": "Faceted Search",
+        "facetedDescription": "Filter results by type, category, and language.",
+        "openSearch": "OpenSearch Integration",
+        "openSearchDescription": "An advanced external search engine for faster results at scale.",
+        "endpoint": "Endpoint"
+      },
+      "ai": {
+        "title": "AI Settings",
+        "description": "AI provider and related features — no real integration at this phase.",
+        "provider": "Provider",
+        "providerNone": "None",
+        "embeddings": "Embeddings",
+        "embeddingsDescription": "Enable semantic search via numeric content representations.",
+        "summarization": "Summarization",
+        "summarizationDescription": "Generate automatic summaries for long content.",
+        "translationAssistance": "Translation Assistance",
+        "translationAssistanceDescription": "Suggest a draft translation for a human translator to review — never auto-approved."
+      },
+      "security": {
+        "title": "Security",
+        "description": "Session, password, and monitoring policies.",
+        "sessionTimeout": "Session Timeout (minutes)",
+        "passwordPolicy": "Password Policy",
+        "passwordMinLength": "Minimum Password Length",
+        "passwordRequireSymbols": "Require special characters",
+        "mfa": "Multi-Factor Authentication (MFA)",
+        "mfaDescription": "An extra protection layer via a second verification code.",
+        "auditLogging": "Audit Logging",
+        "auditLoggingDescription": "Log every sensitive action for later review.",
+        "maxLoginAttempts": "Maximum Login Attempts"
+      }
+    },
+    "reportsNav": {
+      "title": "Reports",
+      "content": "Content Report",
+      "users": "Users Report",
+      "localization": "Localization Report",
+      "system": "System Report"
+    },
+    "reports": {
+      "overviewTitle": "Reports Overview",
+      "overviewDescription": "Every number below is derived directly from prior modules’ data — no independent data.",
+      "content": {
+        "title": "Content Report",
+        "description": "Content statistics across all kinds, derived from the Content Engine, Academy, and Media Library.",
+        "articles": "Articles",
+        "lessons": "Lessons",
+        "fatwas": "Fatwas",
+        "books": "Books",
+        "translations": "Translations",
+        "media": "Media",
+        "courses": "Courses",
+        "news": "News"
+      },
+      "users": {
+        "title": "Users Report",
+        "description": "User activity and role distribution, derived from the User Management module.",
+        "activeUsers": "Active Users",
+        "totalUsers": "Total Users",
+        "roleDistribution": "Role Distribution",
+        "recentLogins": "Recent Logins",
+        "recentActivity": "Recent Activity"
+      },
+      "localization": {
+        "title": "Localization Report",
+        "description": "Translation completion status across all languages, derived directly from the Localization module.",
+        "untranslatedTotal": "Total Incomplete Items"
+      },
+      "system": {
+        "title": "System Report",
+        "description": "General operational indicators — some are explicit placeholders noted below.",
+        "storageUsed": "Storage Used",
+        "memoryUsage": "Memory Usage",
+        "memoryPlaceholderNotice": "Placeholder value — no real OS-level metric in a frontend-only environment.",
+        "filesCount": "File Count",
+        "errorLog": "Error Log",
+        "errorLogNotice": "Derived from the real activity log (failed operations) — not a real server error log.",
+        "noErrors": "No errors logged"
+      }
+    }
+  }
+}

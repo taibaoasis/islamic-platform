@@ -1,0 +1,81 @@
+@import "tailwindcss";
+@import "./themes.css";
+
+/* يفعّل وضع الظلام عبر class="dark" على <html> (يديره next-themes) — */
+/* صيغة Tailwind v4 لضبط اتجاه الوضع الليلي بدل darkMode:"class" في v3. */
+/* Enables dark mode via class="dark" on <html> (managed by next-themes) — */
+/* Tailwind v4's way of configuring dark mode instead of v3's darkMode:"class". */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* يربط متغيرات الثيم في themes.css برموز ألوان Tailwind (bg-primary...) */
+/* ويربط متغيرات الخطوط من next/font (config/fonts.ts) برموز الخطوط. */
+/* Wires the theme variables in themes.css to Tailwind color tokens */
+/* (bg-primary...) and next/font variables (config/fonts.ts) to font tokens. */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --font-sans: var(--next-font-latin, system-ui, sans-serif);
+  --font-arabic: var(--next-font-arabic, system-ui, sans-serif);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    /* dir و lang يُضبطان ديناميكيًا في app/[locale]/layout.tsx */
+    /* dir & lang are set dynamically in app/[locale]/layout.tsx */
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* دعم RTL منطقي: استخدم start/end بدل left/right في كل مكان ممكن. */
+  /* Logical RTL support: prefer start/end over left/right everywhere possible. */
+
+  /* حركة فتح/إغلاق Accordion (components/ui/accordion.tsx) */
+  /* Accordion open/close animation (components/ui/accordion.tsx) */
+  @keyframes accordion-down {
+    from { height: 0; }
+    to { height: var(--radix-accordion-content-height); }
+  }
+  @keyframes accordion-up {
+    from { height: var(--radix-accordion-content-height); }
+    to { height: 0; }
+  }
+
+  /* يحترم تفضيل تقليل الحركة على مستوى النظام (إتاحة الوصول). */
+  /* Respects the system-level reduced-motion preference (accessibility). */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

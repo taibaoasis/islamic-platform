@@ -1,0 +1,32 @@
+"use client";
+
+import { useToast } from "@/hooks/use-toast";
+import {
+  Toast,
+  ToastClose,
+  ToastDescription,
+  ToastProvider,
+  ToastTitle,
+  ToastViewport,
+} from "@/components/ui/toast";
+
+/** يُركَّب مرة واحدة في جذر التطبيق (انظر components/providers). Mounted once at the app root (see components/providers). */
+export function Toaster() {
+  const { toasts } = useToast();
+
+  return (
+    <ToastProvider>
+      {toasts.map(({ id, title, description, variant, action }) => (
+        <Toast key={id} variant={variant}>
+          <div className="grid gap-1">
+            {title && <ToastTitle>{title}</ToastTitle>}
+            {description && <ToastDescription>{description}</ToastDescription>}
+          </div>
+          {action}
+          <ToastClose />
+        </Toast>
+      ))}
+      <ToastViewport />
+    </ToastProvider>
+  );
+}
