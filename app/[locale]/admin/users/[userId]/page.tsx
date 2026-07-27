@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import { UserProfileView } from "@/components/admin/users/user-profile-view";
 import { getUserById, mockAdminUsers } from "@/lib/mock/admin-users";
+import { requireAdminPermission } from "@/services/auth.service";
 import { siteConfig, type Locale } from "@/config/site";
 
 export function generateStaticParams() {
@@ -25,6 +26,7 @@ export default async function AdminUserProfilePage({
 }: {
   params: Promise<{ userId: string }>;
 }) {
+  await requireAdminPermission("user:manage");
   const { userId } = await params;
   const user = getUserById(userId);
   if (!user) notFound();
