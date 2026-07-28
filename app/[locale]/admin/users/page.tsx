@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
 import { UsersTable } from "@/components/admin/users/users-table";
+import { requireAdminPermission } from "@/services/auth.service";
 import { siteConfig, type Locale } from "@/config/site";
 
 export async function generateMetadata({
@@ -15,6 +16,7 @@ export async function generateMetadata({
 }
 
 export default async function AdminUsersPage() {
+  await requireAdminPermission("user:manage");
   const t = await getTranslations("admin.users");
 
   return (

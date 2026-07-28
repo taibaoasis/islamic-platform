@@ -3,6 +3,7 @@ import { getTranslations, getLocale } from "next-intl/server";
 
 import { RoleCard } from "@/components/admin/users/role-card";
 import { roles } from "@/config/permissions";
+import { requireAdminPermission } from "@/services/auth.service";
 import { siteConfig, type Locale } from "@/config/site";
 
 export async function generateMetadata({
@@ -27,6 +28,7 @@ export async function generateMetadata({
  * extra card automatically, with zero changes to this file.
  */
 export default async function AdminRolesPage() {
+  await requireAdminPermission("user:manage");
   const t = await getTranslations("admin.roles");
   const locale = (await getLocale()) as Locale;
 
