@@ -81,6 +81,7 @@ model User {
   emailVerified DateTime?
   image         String?
   role          Role      @default(MEMBER)
+  passwordHash  String?   @map("password_hash") @db.Text
 
   accounts Account[]
   sessions Session[]
@@ -223,43 +224,43 @@ model Scholar {
   localeGroupId String @map("locale_group_id") @db.Uuid
   language      String @db.VarChar(10)
 
-  fullName               String  @map("full_name") @db.VarChar(150)
-  biography              String  @map("biography") @db.Text
-  specializationTopicId  String  @map("specialization_topic_id") @db.Uuid
-  era                    Era
-  credentialsSummary     String? @map("credentials_summary") @db.VarChar(500)
-  isLivingMember         Boolean @default(false) @map("is_living_member")
-  linkedUserId           String? @map("linked_user_id") @db.Uuid
+  fullName              String  @map("full_name") @db.VarChar(150)
+  biography             String  @map("biography") @db.Text
+  specializationTopicId String  @map("specialization_topic_id") @db.Uuid
+  era                   Era
+  credentialsSummary    String? @map("credentials_summary") @db.VarChar(500)
+  isLivingMember        Boolean @default(false) @map("is_living_member")
+  linkedUserId          String? @map("linked_user_id") @db.Uuid
 
-  linkedUser     User?  @relation(fields: [linkedUserId], references: [id], onDelete: SetNull)
-  specialization Topic  @relation(fields: [specializationTopicId], references: [id], onDelete: Restrict)
+  linkedUser     User? @relation(fields: [linkedUserId], references: [id], onDelete: SetNull)
+  specialization Topic @relation(fields: [specializationTopicId], references: [id], onDelete: Restrict)
 
   // الأعمدة القياسية (§0.2 Database Logical Design)
-  version           Int       @default(1)
-  status            ContentStatus @default(DRAFT)
-  createdAt         DateTime  @default(now()) @map("created_at")
-  updatedAt         DateTime  @updatedAt @map("updated_at")
-  deletedAt         DateTime? @map("deleted_at")
-  createdBy         String    @map("created_by") @db.Uuid
-  updatedBy         String?   @map("updated_by") @db.Uuid
-  reviewedBy        String?   @map("reviewed_by") @db.Uuid
-  approvedBy        String?   @map("approved_by") @db.Uuid
-  publishedBy       String?   @map("published_by") @db.Uuid
-  seoSlug           String?   @map("seo_slug") @db.VarChar(255)
-  seoMetaTitle      String?   @map("seo_meta_title") @db.VarChar(60)
-  seoMetaDescription String?  @map("seo_meta_description") @db.VarChar(160)
-  isAiIndexable     Boolean   @default(false) @map("is_ai_indexable")
-  isSearchIndexed   Boolean   @default(false) @map("is_search_indexed")
+  version            Int           @default(1)
+  status             ContentStatus @default(DRAFT)
+  createdAt          DateTime      @default(now()) @map("created_at")
+  updatedAt          DateTime      @updatedAt @map("updated_at")
+  deletedAt          DateTime?     @map("deleted_at")
+  createdBy          String        @map("created_by") @db.Uuid
+  updatedBy          String?       @map("updated_by") @db.Uuid
+  reviewedBy         String?       @map("reviewed_by") @db.Uuid
+  approvedBy         String?       @map("approved_by") @db.Uuid
+  publishedBy        String?       @map("published_by") @db.Uuid
+  seoSlug            String?       @map("seo_slug") @db.VarChar(255)
+  seoMetaTitle       String?       @map("seo_meta_title") @db.VarChar(60)
+  seoMetaDescription String?       @map("seo_meta_description") @db.VarChar(160)
+  isAiIndexable      Boolean       @default(false) @map("is_ai_indexable")
+  isSearchIndexed    Boolean       @default(false) @map("is_search_indexed")
 
-  affiliations         ScholarCenterAffiliation[]
-  tafsirs              Tafsir[]
-  gradedHadiths        Hadith[]
-  compiledCollections  HadithCollection[]
-  commentaries         ScholarCommentary[]
-  fatwas               Fatwa[]
-  articles             Article[]
-  books                Book[]
-  eventAppearances     EventScholar[]
+  affiliations        ScholarCenterAffiliation[]
+  tafsirs             Tafsir[]
+  gradedHadiths       Hadith[]
+  compiledCollections HadithCollection[]
+  commentaries        ScholarCommentary[]
+  fatwas              Fatwa[]
+  articles            Article[]
+  books               Book[]
+  eventAppearances    EventScholar[]
 
   @@unique([localeGroupId, language])
   @@index([specializationTopicId])
@@ -280,22 +281,22 @@ model Author {
 
   user User @relation(fields: [userId], references: [id], onDelete: Restrict)
 
-  version            Int           @default(1)
-  status              OperationalStatus @default(ACTIVE)
-  createdAt          DateTime      @default(now()) @map("created_at")
-  updatedAt          DateTime      @updatedAt @map("updated_at")
-  deletedAt          DateTime?     @map("deleted_at")
-  createdBy          String        @map("created_by") @db.Uuid
-  updatedBy          String?       @map("updated_by") @db.Uuid
-  seoSlug            String?       @map("seo_slug") @db.VarChar(255)
-  seoMetaTitle       String?       @map("seo_meta_title") @db.VarChar(60)
-  seoMetaDescription String?       @map("seo_meta_description") @db.VarChar(160)
-  isAiIndexable      Boolean       @default(false) @map("is_ai_indexable")
-  isSearchIndexed    Boolean       @default(false) @map("is_search_indexed")
+  version            Int               @default(1)
+  status             OperationalStatus @default(ACTIVE)
+  createdAt          DateTime          @default(now()) @map("created_at")
+  updatedAt          DateTime          @updatedAt @map("updated_at")
+  deletedAt          DateTime?         @map("deleted_at")
+  createdBy          String            @map("created_by") @db.Uuid
+  updatedBy          String?           @map("updated_by") @db.Uuid
+  seoSlug            String?           @map("seo_slug") @db.VarChar(255)
+  seoMetaTitle       String?           @map("seo_meta_title") @db.VarChar(60)
+  seoMetaDescription String?           @map("seo_meta_description") @db.VarChar(160)
+  isAiIndexable      Boolean           @default(false) @map("is_ai_indexable")
+  isSearchIndexed    Boolean           @default(false) @map("is_search_indexed")
 
-  recitations Recitation[]
-  articles    Article[]
-  books       Book[]
+  recitations     Recitation[]
+  articles        Article[]
+  books           Book[]
   audiosAsSpeaker Audio[]
 
   @@unique([localeGroupId, language])
@@ -315,12 +316,12 @@ model Translator {
   userId                  String  @map("user_id") @db.Uuid
   isCertificationVerified Boolean @default(false) @map("is_certification_verified")
 
-  user              User                   @relation(fields: [userId], references: [id], onDelete: Restrict)
+  user              User                 @relation(fields: [userId], references: [id], onDelete: Restrict)
   languages         TranslatorLanguage[]
   quranTranslations QuranTranslation[]
 
   version            Int               @default(1)
-  status              OperationalStatus @default(ACTIVE)
+  status             OperationalStatus @default(ACTIVE)
   createdAt          DateTime          @default(now()) @map("created_at")
   updatedAt          DateTime          @updatedAt @map("updated_at")
   deletedAt          DateTime?         @map("deleted_at")
@@ -340,8 +341,8 @@ model Translator {
 model Reviewer {
   id String @id @default(uuid(7)) @db.Uuid
 
-  fullName     String  @map("full_name") @db.VarChar(150)
-  userId       String  @unique @map("user_id") @db.Uuid
+  fullName     String   @map("full_name") @db.VarChar(150)
+  userId       String   @unique @map("user_id") @db.Uuid
   // reviewScope: مصفوفة مراجع Topic — تُترَك كمصفوفة UUID عادية (Prisma
   // لا يدعم علاقة N:M مباشرة إلى قيم Enum أو بلا جدول ربط صريح لحقل
   // مصفوفة بسيط)؛ موثَّق في التقرير النهائي كقيد Prisma.
@@ -397,10 +398,10 @@ enum TextDirection {
 }
 
 model Language {
-  isoCode        String        @id @db.VarChar(10)
-  nameLocalized  String        @map("name_localized") @db.VarChar(50)
-  direction      TextDirection
-  isActive       Boolean       @default(false) @map("is_active")
+  isoCode       String        @id @db.VarChar(10)
+  nameLocalized String        @map("name_localized") @db.VarChar(50)
+  direction     TextDirection
+  isActive      Boolean       @default(false) @map("is_active")
 
   translatorLanguages TranslatorLanguage[]
 
@@ -440,12 +441,12 @@ model Category {
   localeGroupId String @map("locale_group_id") @db.Uuid
   language      String @db.VarChar(10)
 
-  nameLocalized    String  @map("name_localized") @db.VarChar(100)
-  parentCategoryId String? @map("parent_category_id") @db.Uuid
-  iconImageId      String? @map("icon_image_id") @db.Uuid
-  sortOrder        Int     @default(0) @map("sort_order")
-  depthLevel       Int     @default(0) @map("depth_level")
-  isScholarlyGated Boolean @default(false) @map("is_scholarly_gated")
+  nameLocalized    String         @map("name_localized") @db.VarChar(100)
+  parentCategoryId String?        @map("parent_category_id") @db.Uuid
+  iconImageId      String?        @map("icon_image_id") @db.Uuid
+  sortOrder        Int            @default(0) @map("sort_order")
+  depthLevel       Int            @default(0) @map("depth_level")
+  isScholarlyGated Boolean        @default(false) @map("is_scholarly_gated")
   status           TaxonomyStatus @default(ACTIVE)
 
   parent    Category?  @relation("CategoryHierarchy", fields: [parentCategoryId], references: [id], onDelete: Restrict)
@@ -482,10 +483,10 @@ model Topic {
   localeGroupId String @map("locale_group_id") @db.Uuid
   language      String @db.VarChar(10)
 
-  nameLocalized    String     @map("name_localized") @db.VarChar(100)
-  parentTopicId    String?    @map("parent_topic_id") @db.Uuid
-  facetType        TopicFacet @map("facet_type")
-  isScholarlyGated Boolean    @default(false) @map("is_scholarly_gated")
+  nameLocalized    String         @map("name_localized") @db.VarChar(100)
+  parentTopicId    String?        @map("parent_topic_id") @db.Uuid
+  facetType        TopicFacet     @map("facet_type")
+  isScholarlyGated Boolean        @default(false) @map("is_scholarly_gated")
   status           TaxonomyStatus @default(ACTIVE)
 
   parent   Topic?  @relation("TopicHierarchy", fields: [parentTopicId], references: [id], onDelete: Restrict)
@@ -494,8 +495,8 @@ model Topic {
   scholars          Scholar[]
   assignments       TopicAssignment[]
   fatwas            Fatwa[]
-  coursesAsLevel    Course[] @relation("CourseLevelTopic")
-  coursesAsAudience Course[] @relation("CourseAudienceTopic")
+  coursesAsLevel    Course[]          @relation("CourseLevelTopic")
+  coursesAsAudience Course[]          @relation("CourseAudienceTopic")
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
@@ -515,8 +516,8 @@ model Tag {
   localeGroupId String @map("locale_group_id") @db.Uuid
   language      String @db.VarChar(10)
 
-  nameLocalized String  @map("name_localized") @db.VarChar(50)
-  usageCount    Int     @default(0) @map("usage_count")
+  nameLocalized String         @map("name_localized") @db.VarChar(50)
+  usageCount    Int            @default(0) @map("usage_count")
   status        TaxonomyStatus @default(ACTIVE)
 
   assignments TagAssignment[]
@@ -589,12 +590,12 @@ enum Riwayah {
 }
 
 model Quran {
-  id               String  @id @default(uuid(7)) @db.Uuid
-  riwayah          Riwayah
-  totalSurahCount  Int     @default(114) @map("total_surah_count")
-  totalVerseCount  Int     @map("total_verse_count")
-  sourceEdition    String  @map("source_edition") @db.VarChar(255)
-  isDefault        Boolean @default(false) @map("is_default")
+  id              String  @id @default(uuid(7)) @db.Uuid
+  riwayah         Riwayah
+  totalSurahCount Int     @default(114) @map("total_surah_count")
+  totalVerseCount Int     @map("total_verse_count")
+  sourceEdition   String  @map("source_edition") @db.VarChar(255)
+  isDefault       Boolean @default(false) @map("is_default")
 
   surahs Surah[]
 
@@ -612,10 +613,10 @@ enum RevelationType {
 model Surah {
   id String @id @default(uuid(7)) @db.Uuid
 
-  quranId             String  @map("quran_id") @db.Uuid
-  number              Int
-  arabicName          String  @map("arabic_name") @db.VarChar(100)
-  transliteratedName  String  @map("transliterated_name") @db.VarChar(100)
+  quranId            String         @map("quran_id") @db.Uuid
+  number             Int
+  arabicName         String         @map("arabic_name") @db.VarChar(100)
+  transliteratedName String         @map("transliterated_name") @db.VarChar(100)
   // ترجمة translated_name عبر النمط القياسي — الكيان نفسه غير مقسَّم
   // بصف-لكل-لغة كامل (بيانات مرجعية Reference)؛ الاسم المترجَم وحده
   // مكرَّر لكل لغة عبر جدول ربط بسيط بدل تكرار كل الصف الكامل، استثناء
@@ -623,10 +624,10 @@ model Surah {
   // translated_name translated via a lightweight side-array instead of
   // the full row-per-language pattern, since Surah is Reference (not
   // editorial) data — an exception documented in the final report.
-  translatedNames     Json?   @map("translated_names")
-  revelationType      RevelationType @map("revelation_type")
-  verseCount          Int     @map("verse_count")
-  orderOfRevelation   Int     @map("order_of_revelation")
+  translatedNames    Json?          @map("translated_names")
+  revelationType     RevelationType @map("revelation_type")
+  verseCount         Int            @map("verse_count")
+  orderOfRevelation  Int            @map("order_of_revelation")
 
   quran  Quran   @relation(fields: [quranId], references: [id], onDelete: Restrict)
   verses Verse[]
@@ -643,21 +644,21 @@ model Surah {
 model Verse {
   id String @id @default(uuid(7)) @db.Uuid
 
-  surahId              String  @map("surah_id") @db.Uuid
-  verseNumberInSurah   Int     @map("verse_number_in_surah")
-  absoluteVerseNumber  Int     @unique @map("absolute_verse_number")
-  arabicTextUthmani    String  @map("arabic_text_uthmani") @db.Text
-  arabicTextSimple     String  @map("arabic_text_simple") @db.Text
-  juzNumber            Int     @map("juz_number")
-  hizbNumber           Int     @map("hizb_number")
-  pageNumber           Int?    @map("page_number")
-  sajdahFlag           Boolean @default(false) @map("sajdah_flag")
-  status               ReferenceStatus @default(IMPORTED)
+  surahId             String          @map("surah_id") @db.Uuid
+  verseNumberInSurah  Int             @map("verse_number_in_surah")
+  absoluteVerseNumber Int             @unique @map("absolute_verse_number")
+  arabicTextUthmani   String          @map("arabic_text_uthmani") @db.Text
+  arabicTextSimple    String          @map("arabic_text_simple") @db.Text
+  juzNumber           Int             @map("juz_number")
+  hizbNumber          Int             @map("hizb_number")
+  pageNumber          Int?            @map("page_number")
+  sajdahFlag          Boolean         @default(false) @map("sajdah_flag")
+  status              ReferenceStatus @default(IMPORTED)
 
-  surah              Surah              @relation(fields: [surahId], references: [id], onDelete: Restrict)
-  words              Word[]
-  quranTranslations  QuranTranslation[]
-  tafsirVerses       TafsirVerse[]
+  surah             Surah              @relation(fields: [surahId], references: [id], onDelete: Restrict)
+  words             Word[]
+  quranTranslations QuranTranslation[]
+  tafsirVerses      TafsirVerse[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -684,13 +685,13 @@ enum MorphologicalTag {
 model Word {
   id String @id @default(uuid(7)) @db.Uuid
 
-  verseId           String  @map("verse_id") @db.Uuid
-  positionInVerse    Int     @map("position_in_verse")
-  arabicText         String  @map("arabic_text") @db.VarChar(50)
-  transliteration    String? @db.VarChar(80)
-  morphologicalTag   MorphologicalTag @map("morphological_tag")
-  rootId             String? @map("root_id") @db.Uuid
-  wordGloss          String? @map("word_gloss") @db.VarChar(200)
+  verseId          String           @map("verse_id") @db.Uuid
+  positionInVerse  Int              @map("position_in_verse")
+  arabicText       String           @map("arabic_text") @db.VarChar(50)
+  transliteration  String?          @db.VarChar(80)
+  morphologicalTag MorphologicalTag @map("morphological_tag")
+  rootId           String?          @map("root_id") @db.Uuid
+  wordGloss        String?          @map("word_gloss") @db.VarChar(200)
 
   verse Verse @relation(fields: [verseId], references: [id], onDelete: Restrict)
   root  Root? @relation(fields: [rootId], references: [id], onDelete: SetNull)
@@ -720,27 +721,27 @@ model QuranTranslation {
   localeGroupId String @map("locale_group_id") @db.Uuid
   language      String @db.VarChar(10)
 
-  verseId             String  @map("verse_id") @db.Uuid
-  translatorId        String  @map("translator_id") @db.Uuid
-  translatedText      String  @map("translated_text") @db.Text
-  methodologyNote     String? @map("methodology_note") @db.VarChar(500)
-  footnotes           String? @db.Text
-  disclaimerAccepted  Boolean @default(false) @map("disclaimer_accepted")
-  status              ContentStatus @default(DRAFT)
+  verseId            String        @map("verse_id") @db.Uuid
+  translatorId       String        @map("translator_id") @db.Uuid
+  translatedText     String        @map("translated_text") @db.Text
+  methodologyNote    String?       @map("methodology_note") @db.VarChar(500)
+  footnotes          String?       @db.Text
+  disclaimerAccepted Boolean       @default(false) @map("disclaimer_accepted")
+  status             ContentStatus @default(DRAFT)
 
   verse      Verse      @relation(fields: [verseId], references: [id], onDelete: Restrict)
   translator Translator @relation(fields: [translatorId], references: [id], onDelete: Restrict)
 
-  version   Int       @default(1)
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
-  createdBy String    @map("created_by") @db.Uuid
-  reviewedBy String?  @map("reviewed_by") @db.Uuid
-  approvedBy String?  @map("approved_by") @db.Uuid
-  publishedBy String? @map("published_by") @db.Uuid
-  isAiIndexable   Boolean @default(false) @map("is_ai_indexable")
-  isSearchIndexed Boolean @default(false) @map("is_search_indexed")
+  version         Int       @default(1)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+  createdBy       String    @map("created_by") @db.Uuid
+  reviewedBy      String?   @map("reviewed_by") @db.Uuid
+  approvedBy      String?   @map("approved_by") @db.Uuid
+  publishedBy     String?   @map("published_by") @db.Uuid
+  isAiIndexable   Boolean   @default(false) @map("is_ai_indexable")
+  isSearchIndexed Boolean   @default(false) @map("is_search_indexed")
 
   @@unique([localeGroupId, language])
   @@index([verseId])
@@ -772,17 +773,17 @@ model Tafsir {
   book    Book?         @relation(fields: [bookId], references: [id], onDelete: SetNull)
   verses  TafsirVerse[]
 
-  version   Int       @default(1)
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
-  createdBy String    @map("created_by") @db.Uuid
-  reviewedBy String?  @map("reviewed_by") @db.Uuid
-  approvedBy String?  @map("approved_by") @db.Uuid
-  publishedBy String? @map("published_by") @db.Uuid
-  seoSlug   String?   @map("seo_slug") @db.VarChar(255)
-  isAiIndexable   Boolean @default(false) @map("is_ai_indexable")
-  isSearchIndexed Boolean @default(false) @map("is_search_indexed")
+  version         Int       @default(1)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+  createdBy       String    @map("created_by") @db.Uuid
+  reviewedBy      String?   @map("reviewed_by") @db.Uuid
+  approvedBy      String?   @map("approved_by") @db.Uuid
+  publishedBy     String?   @map("published_by") @db.Uuid
+  seoSlug         String?   @map("seo_slug") @db.VarChar(255)
+  isAiIndexable   Boolean   @default(false) @map("is_ai_indexable")
+  isSearchIndexed Boolean   @default(false) @map("is_search_indexed")
 
   @@unique([localeGroupId, language])
   @@index([scholarId])
@@ -846,12 +847,12 @@ enum HadithGrade {
 model Hadith {
   id String @id @default(uuid(7)) @db.Uuid
 
-  matnText            String      @map("matn_text") @db.Text
-  grade               HadithGrade
-  gradingScholarId    String      @map("grading_scholar_id") @db.Uuid
-  hadithCollectionId  String      @map("hadith_collection_id") @db.Uuid
-  bookId              String      @map("book_id") @db.Uuid
-  status              ReferenceStatus @default(IMPORTED)
+  matnText           String          @map("matn_text") @db.Text
+  grade              HadithGrade
+  gradingScholarId   String          @map("grading_scholar_id") @db.Uuid
+  hadithCollectionId String          @map("hadith_collection_id") @db.Uuid
+  bookId             String          @map("book_id") @db.Uuid
+  status             ReferenceStatus @default(IMPORTED)
 
   gradingScholar   Scholar          @relation(fields: [gradingScholarId], references: [id], onDelete: Restrict)
   hadithCollection HadithCollection @relation(fields: [hadithCollectionId], references: [id], onDelete: Restrict)
@@ -869,14 +870,14 @@ model Hadith {
 model HadithCollection {
   id String @id @default(uuid(7)) @db.Uuid
 
-  localeGroupId       String @map("locale_group_id") @db.Uuid
-  language            String @db.VarChar(10)
+  localeGroupId String @map("locale_group_id") @db.Uuid
+  language      String @db.VarChar(10)
 
-  collectionName      String @map("collection_name") @db.VarChar(150)
-  compilerScholarId   String @map("compiler_scholar_id") @db.Uuid
-  era                 String? @db.VarChar(50)
-  totalHadithCount    Int    @default(0) @map("total_hadith_count")
-  status              ReferenceStatus @default(IMPORTED)
+  collectionName    String          @map("collection_name") @db.VarChar(150)
+  compilerScholarId String          @map("compiler_scholar_id") @db.Uuid
+  era               String?         @db.VarChar(50)
+  totalHadithCount  Int             @default(0) @map("total_hadith_count")
+  status            ReferenceStatus @default(IMPORTED)
 
   compilerScholar Scholar  @relation(fields: [compilerScholarId], references: [id], onDelete: Restrict)
   hadiths         Hadith[]
@@ -898,15 +899,15 @@ enum GenerationLayer {
 model Narrator {
   id String @id @default(uuid(7)) @db.Uuid
 
-  localeGroupId          String @map("locale_group_id") @db.Uuid
-  language               String @db.VarChar(10)
+  localeGroupId String @map("locale_group_id") @db.Uuid
+  language      String @db.VarChar(10)
 
-  fullName                String          @map("full_name") @db.VarChar(150)
-  generationLayer         GenerationLayer @map("generation_layer")
-  reliabilityAssessment   String          @map("reliability_assessment") @db.VarChar(500)
-  birthEra                String?         @map("birth_era") @db.VarChar(50)
-  deathEra                String?         @map("death_era") @db.VarChar(50)
-  status                  ReferenceStatus @default(IMPORTED)
+  fullName              String          @map("full_name") @db.VarChar(150)
+  generationLayer       GenerationLayer @map("generation_layer")
+  reliabilityAssessment String          @map("reliability_assessment") @db.VarChar(500)
+  birthEra              String?         @map("birth_era") @db.VarChar(50)
+  deathEra              String?         @map("death_era") @db.VarChar(50)
+  status                ReferenceStatus @default(IMPORTED)
 
   hadithChains HadithNarrator[]
 
@@ -946,15 +947,15 @@ model ScholarCommentary {
 
   scholar Scholar @relation(fields: [scholarId], references: [id], onDelete: Restrict)
 
-  version   Int       @default(1)
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
-  createdBy String    @map("created_by") @db.Uuid
-  reviewedBy String?  @map("reviewed_by") @db.Uuid
-  approvedBy String?  @map("approved_by") @db.Uuid
-  isAiIndexable   Boolean @default(false) @map("is_ai_indexable")
-  isSearchIndexed Boolean @default(false) @map("is_search_indexed")
+  version         Int       @default(1)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+  createdBy       String    @map("created_by") @db.Uuid
+  reviewedBy      String?   @map("reviewed_by") @db.Uuid
+  approvedBy      String?   @map("approved_by") @db.Uuid
+  isAiIndexable   Boolean   @default(false) @map("is_ai_indexable")
+  isSearchIndexed Boolean   @default(false) @map("is_search_indexed")
 
   @@unique([localeGroupId, language])
   @@index([relatedEntityType, relatedEntityId])
@@ -972,22 +973,22 @@ model Fatwa {
   localeGroupId String @map("locale_group_id") @db.Uuid
   language      String @db.VarChar(10)
 
-  questionText        String   @map("question_text") @db.Text
-  answerText          String   @map("answer_text") @db.Text
-  fiqhSchoolTopicId   String   @map("fiqh_school_topic_id") @db.Uuid
-  issueDate           DateTime @map("issue_date") @db.Date
-  scholarId           String   @map("scholar_id") @db.Uuid
-  status              ContentStatus @default(DRAFT)
+  questionText      String        @map("question_text") @db.Text
+  answerText        String        @map("answer_text") @db.Text
+  fiqhSchoolTopicId String        @map("fiqh_school_topic_id") @db.Uuid
+  issueDate         DateTime      @map("issue_date") @db.Date
+  scholarId         String        @map("scholar_id") @db.Uuid
+  status            ContentStatus @default(DRAFT)
 
   fiqhSchool Topic   @relation(fields: [fiqhSchoolTopicId], references: [id], onDelete: Restrict)
   scholar    Scholar @relation(fields: [scholarId], references: [id], onDelete: Restrict)
 
-  version     Int       @default(1)
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
-  deletedAt   DateTime? @map("deleted_at")
-  createdBy   String    @map("created_by") @db.Uuid
-  reviewedBy  String?   @map("reviewed_by") @db.Uuid
+  version         Int       @default(1)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+  createdBy       String    @map("created_by") @db.Uuid
+  reviewedBy      String?   @map("reviewed_by") @db.Uuid
   // approvedBy: يجب أن يختلف عن scholarId (استقلالية الاعتماد — Content
   // Models §3.1). قيد بين عمودين، غير قابل للتعبير كـ Prisma attribute
   // بسيط؛ يُفرَض في طبقة الخدمة (services/) لا في Schema. موثَّق كقيد
@@ -997,11 +998,11 @@ model Fatwa {
   // as a simple Prisma attribute; enforced in the service layer
   // (services/), not the schema. Documented as a Prisma constraint in
   // the final report.
-  approvedBy  String?   @map("approved_by") @db.Uuid
-  publishedBy String?   @map("published_by") @db.Uuid
-  seoSlug     String?   @map("seo_slug") @db.VarChar(255)
-  isAiIndexable   Boolean @default(false) @map("is_ai_indexable")
-  isSearchIndexed Boolean @default(false) @map("is_search_indexed")
+  approvedBy      String?   @map("approved_by") @db.Uuid
+  publishedBy     String?   @map("published_by") @db.Uuid
+  seoSlug         String?   @map("seo_slug") @db.VarChar(255)
+  isAiIndexable   Boolean   @default(false) @map("is_ai_indexable")
+  isSearchIndexed Boolean   @default(false) @map("is_search_indexed")
 
   @@unique([localeGroupId, language])
   @@index([scholarId])
@@ -1015,33 +1016,33 @@ model Article {
   localeGroupId String @map("locale_group_id") @db.Uuid
   language      String @db.VarChar(10)
 
-  title             String  @db.VarChar(200)
-  bodyText          String  @map("body_text") @db.Text
-  excerpt           String  @db.VarChar(300)
-  featuredImageId   String? @map("featured_image_id") @db.Uuid
-  authorId          String? @map("author_id") @db.Uuid
-  scholarId         String? @map("scholar_id") @db.Uuid
-  categoryId        String  @map("category_id") @db.Uuid
-  status            ContentStatus @default(DRAFT)
+  title           String        @db.VarChar(200)
+  bodyText        String        @map("body_text") @db.Text
+  excerpt         String        @db.VarChar(300)
+  featuredImageId String?       @map("featured_image_id") @db.Uuid
+  authorId        String?       @map("author_id") @db.Uuid
+  scholarId       String?       @map("scholar_id") @db.Uuid
+  categoryId      String        @map("category_id") @db.Uuid
+  status          ContentStatus @default(DRAFT)
 
   author        Author?  @relation(fields: [authorId], references: [id], onDelete: Restrict)
   scholar       Scholar? @relation(fields: [scholarId], references: [id], onDelete: Restrict)
   category      Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
   featuredImage Image?   @relation(fields: [featuredImageId], references: [id], onDelete: SetNull)
 
-  version     Int       @default(1)
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
-  deletedAt   DateTime? @map("deleted_at")
-  createdBy   String    @map("created_by") @db.Uuid
-  reviewedBy  String?   @map("reviewed_by") @db.Uuid
-  approvedBy  String?   @map("approved_by") @db.Uuid
-  publishedBy String?   @map("published_by") @db.Uuid
-  seoSlug            String? @map("seo_slug") @db.VarChar(255)
-  seoMetaTitle       String? @map("seo_meta_title") @db.VarChar(60)
-  seoMetaDescription String? @map("seo_meta_description") @db.VarChar(160)
-  isAiIndexable   Boolean @default(false) @map("is_ai_indexable")
-  isSearchIndexed Boolean @default(false) @map("is_search_indexed")
+  version            Int       @default(1)
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+  deletedAt          DateTime? @map("deleted_at")
+  createdBy          String    @map("created_by") @db.Uuid
+  reviewedBy         String?   @map("reviewed_by") @db.Uuid
+  approvedBy         String?   @map("approved_by") @db.Uuid
+  publishedBy        String?   @map("published_by") @db.Uuid
+  seoSlug            String?   @map("seo_slug") @db.VarChar(255)
+  seoMetaTitle       String?   @map("seo_meta_title") @db.VarChar(60)
+  seoMetaDescription String?   @map("seo_meta_description") @db.VarChar(160)
+  isAiIndexable      Boolean   @default(false) @map("is_ai_indexable")
+  isSearchIndexed    Boolean   @default(false) @map("is_search_indexed")
 
   @@unique([localeGroupId, language])
   @@index([categoryId])
@@ -1060,19 +1061,19 @@ enum BookType {
 model Book {
   id String @id @default(uuid(7)) @db.Uuid
 
-  title              String   @db.VarChar(250)
-  authorId           String?  @map("author_id") @db.Uuid
-  scholarId          String?  @map("scholar_id") @db.Uuid
-  publicationEra     String   @map("publication_era") @db.VarChar(50)
-  bookType           BookType @map("book_type")
-  digitalAttachmentId String? @map("digital_attachment_id") @db.Uuid
-  isbn               String?  @db.VarChar(20)
+  title               String   @db.VarChar(250)
+  authorId            String?  @map("author_id") @db.Uuid
+  scholarId           String?  @map("scholar_id") @db.Uuid
+  publicationEra      String   @map("publication_era") @db.VarChar(50)
+  bookType            BookType @map("book_type")
+  digitalAttachmentId String?  @map("digital_attachment_id") @db.Uuid
+  isbn                String?  @db.VarChar(20)
 
-  author           Author?     @relation(fields: [authorId], references: [id], onDelete: Restrict)
-  scholar          Scholar?    @relation(fields: [scholarId], references: [id], onDelete: Restrict)
+  author            Author?     @relation(fields: [authorId], references: [id], onDelete: Restrict)
+  scholar           Scholar?    @relation(fields: [scholarId], references: [id], onDelete: Restrict)
   digitalAttachment Attachment? @relation(fields: [digitalAttachmentId], references: [id], onDelete: SetNull)
-  hadiths          Hadith[]
-  tafsirs          Tafsir[]
+  hadiths           Hadith[]
+  tafsirs           Tafsir[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -1119,13 +1120,13 @@ model Course {
   localeGroupId String @map("locale_group_id") @db.Uuid
   language      String @db.VarChar(10)
 
-  title               String  @db.VarChar(200)
-  description         String  @db.Text
-  levelTopicId        String  @map("level_topic_id") @db.Uuid
-  audienceTopicId     String  @map("audience_topic_id") @db.Uuid
-  certificateEligible Boolean @default(false) @map("certificate_eligible")
-  coverImageId        String? @map("cover_image_id") @db.Uuid
-  teacherId           String  @map("teacher_id") @db.Uuid
+  title               String        @db.VarChar(200)
+  description         String        @db.Text
+  levelTopicId        String        @map("level_topic_id") @db.Uuid
+  audienceTopicId     String        @map("audience_topic_id") @db.Uuid
+  certificateEligible Boolean       @default(false) @map("certificate_eligible")
+  coverImageId        String?       @map("cover_image_id") @db.Uuid
+  teacherId           String        @map("teacher_id") @db.Uuid
   status              ContentStatus @default(DRAFT)
 
   levelTopic    Topic  @relation("CourseLevelTopic", fields: [levelTopicId], references: [id], onDelete: Restrict)
@@ -1137,19 +1138,19 @@ model Course {
   quizzes     Quiz[]
   enrollments Enrollment[]
 
-  version     Int       @default(1)
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
-  deletedAt   DateTime? @map("deleted_at")
-  createdBy   String    @map("created_by") @db.Uuid
-  reviewedBy  String?   @map("reviewed_by") @db.Uuid
-  approvedBy  String?   @map("approved_by") @db.Uuid
-  publishedBy String?   @map("published_by") @db.Uuid
-  seoSlug            String? @map("seo_slug") @db.VarChar(255)
-  seoMetaTitle       String? @map("seo_meta_title") @db.VarChar(60)
-  seoMetaDescription String? @map("seo_meta_description") @db.VarChar(160)
-  isAiIndexable   Boolean @default(false) @map("is_ai_indexable")
-  isSearchIndexed Boolean @default(false) @map("is_search_indexed")
+  version            Int       @default(1)
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+  deletedAt          DateTime? @map("deleted_at")
+  createdBy          String    @map("created_by") @db.Uuid
+  reviewedBy         String?   @map("reviewed_by") @db.Uuid
+  approvedBy         String?   @map("approved_by") @db.Uuid
+  publishedBy        String?   @map("published_by") @db.Uuid
+  seoSlug            String?   @map("seo_slug") @db.VarChar(255)
+  seoMetaTitle       String?   @map("seo_meta_title") @db.VarChar(60)
+  seoMetaDescription String?   @map("seo_meta_description") @db.VarChar(160)
+  isAiIndexable      Boolean   @default(false) @map("is_ai_indexable")
+  isSearchIndexed    Boolean   @default(false) @map("is_search_indexed")
 
   @@unique([localeGroupId, language])
   @@index([status, language])
@@ -1168,14 +1169,14 @@ model Lesson {
   localeGroupId String @map("locale_group_id") @db.Uuid
   language      String @db.VarChar(10)
 
-  courseId                  String            @map("course_id") @db.Uuid
-  title                     String            @db.VarChar(200)
-  orderIndex                Int               @map("order_index")
-  contentType               LessonContentType @map("content_type")
-  bodyText                  String?           @map("body_text") @db.Text
-  estimatedDurationMinutes  Int               @map("estimated_duration_minutes")
-  quizId                    String?           @map("quiz_id") @db.Uuid
-  status                    ContentStatus     @default(DRAFT)
+  courseId                 String            @map("course_id") @db.Uuid
+  title                    String            @db.VarChar(200)
+  orderIndex               Int               @map("order_index")
+  contentType              LessonContentType @map("content_type")
+  bodyText                 String?           @map("body_text") @db.Text
+  estimatedDurationMinutes Int               @map("estimated_duration_minutes")
+  quizId                   String?           @map("quiz_id") @db.Uuid
+  status                   ContentStatus     @default(DRAFT)
 
   course       Course              @relation(fields: [courseId], references: [id], onDelete: Cascade)
   quiz         Quiz?               @relation("LessonQuiz", fields: [quizId], references: [id], onDelete: SetNull)
@@ -1214,14 +1215,14 @@ model LessonContentItem {
 model Quiz {
   id String @id @default(uuid(7)) @db.Uuid
 
-  title                    String @db.VarChar(200)
-  courseId                 String? @map("course_id") @db.Uuid
-  passingScorePercentage   Int    @default(70) @map("passing_score_percentage")
-  attemptLimit             Int?   @map("attempt_limit")
-  timeLimitMinutes         Int?   @map("time_limit_minutes")
+  title                  String  @db.VarChar(200)
+  courseId               String? @map("course_id") @db.Uuid
+  passingScorePercentage Int     @default(70) @map("passing_score_percentage")
+  attemptLimit           Int?    @map("attempt_limit")
+  timeLimitMinutes       Int?    @map("time_limit_minutes")
 
-  course    Course?        @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  lessons   Lesson[]       @relation("LessonQuiz")
+  course    Course?       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons   Lesson[]      @relation("LessonQuiz")
   questions Question[]
   attempts  QuizAttempt[]
 
@@ -1268,13 +1269,13 @@ model Answer {
 }
 
 model Enrollment {
-  id                  String    @id @default(uuid(7)) @db.Uuid
-  userId              String    @map("user_id") @db.Uuid
-  courseId            String    @map("course_id") @db.Uuid
-  enrolledAt          DateTime  @default(now()) @map("enrolled_at")
-  progressPercentage  Int       @default(0) @map("progress_percentage")
-  completedAt         DateTime? @map("completed_at")
-  certificateIssued   Boolean   @default(false) @map("certificate_issued")
+  id                 String    @id @default(uuid(7)) @db.Uuid
+  userId             String    @map("user_id") @db.Uuid
+  courseId           String    @map("course_id") @db.Uuid
+  enrolledAt         DateTime  @default(now()) @map("enrolled_at")
+  progressPercentage Int       @default(0) @map("progress_percentage")
+  completedAt        DateTime? @map("completed_at")
+  certificateIssued  Boolean   @default(false) @map("certificate_issued")
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Restrict)
   course Course @relation(fields: [courseId], references: [id], onDelete: Restrict)
@@ -1284,14 +1285,14 @@ model Enrollment {
 }
 
 model QuizAttempt {
-  id             String    @id @default(uuid(7)) @db.Uuid
-  userId         String    @map("user_id") @db.Uuid
-  quizId         String    @map("quiz_id") @db.Uuid
-  attemptNumber  Int       @map("attempt_number")
-  scorePercentage Int?     @map("score_percentage")
-  startedAt      DateTime  @default(now()) @map("started_at")
-  submittedAt    DateTime? @map("submitted_at")
-  passed         Boolean?
+  id              String    @id @default(uuid(7)) @db.Uuid
+  userId          String    @map("user_id") @db.Uuid
+  quizId          String    @map("quiz_id") @db.Uuid
+  attemptNumber   Int       @map("attempt_number")
+  scorePercentage Int?      @map("score_percentage")
+  startedAt       DateTime  @default(now()) @map("started_at")
+  submittedAt     DateTime? @map("submitted_at")
+  passed          Boolean?
 
   user User @relation(fields: [userId], references: [id], onDelete: Restrict)
   quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Restrict)
@@ -1308,13 +1309,13 @@ model QuizAttempt {
 model Video {
   id String @id @default(uuid(7)) @db.Uuid
 
-  title            String  @db.VarChar(200)
-  storageFileKey   String  @map("storage_file_key") @db.VarChar(500)
-  durationSeconds  Int     @map("duration_seconds")
-  resolution       String  @db.VarChar(20)
-  transcriptText   String? @map("transcript_text") @db.Text
-  thumbnailImageId String  @map("thumbnail_image_id") @db.Uuid
-  uploaderUserId   String  @map("uploader_user_id") @db.Uuid
+  title            String      @db.VarChar(200)
+  storageFileKey   String      @map("storage_file_key") @db.VarChar(500)
+  durationSeconds  Int         @map("duration_seconds")
+  resolution       String      @db.VarChar(20)
+  transcriptText   String?     @map("transcript_text") @db.Text
+  thumbnailImageId String      @map("thumbnail_image_id") @db.Uuid
+  uploaderUserId   String      @map("uploader_user_id") @db.Uuid
   status           MediaStatus @default(UPLOADED)
 
   thumbnailImage Image @relation(fields: [thumbnailImageId], references: [id], onDelete: Restrict)
@@ -1330,11 +1331,11 @@ model Video {
 model Audio {
   id String @id @default(uuid(7)) @db.Uuid
 
-  title           String  @db.VarChar(200)
-  storageFileKey  String  @map("storage_file_key") @db.VarChar(500)
-  durationSeconds Int     @map("duration_seconds")
-  speakerId       String? @map("speaker_id") @db.Uuid
-  transcriptText  String? @map("transcript_text") @db.Text
+  title           String      @db.VarChar(200)
+  storageFileKey  String      @map("storage_file_key") @db.VarChar(500)
+  durationSeconds Int         @map("duration_seconds")
+  speakerId       String?     @map("speaker_id") @db.Uuid
+  transcriptText  String?     @map("transcript_text") @db.Text
   status          MediaStatus @default(UPLOADED)
 
   speaker     Author?      @relation(fields: [speakerId], references: [id], onDelete: SetNull)
@@ -1349,12 +1350,12 @@ model Audio {
 }
 
 model Image {
-  id             String @id @default(uuid(7)) @db.Uuid
-  storageFileKey String @map("storage_file_key") @db.VarChar(500)
-  altText        String @map("alt_text") @db.VarChar(200)
-  caption        String? @db.VarChar(300)
-  widthPx        Int    @map("width_px")
-  heightPx       Int    @map("height_px")
+  id             String      @id @default(uuid(7)) @db.Uuid
+  storageFileKey String      @map("storage_file_key") @db.VarChar(500)
+  altText        String      @map("alt_text") @db.VarChar(200)
+  caption        String?     @db.VarChar(300)
+  widthPx        Int         @map("width_px")
+  heightPx       Int         @map("height_px")
   status         MediaStatus @default(UPLOADED)
 
   videos     Video[]
@@ -1411,12 +1412,12 @@ enum MediaUsageRole {
 }
 
 model MediaUsage {
-  id          String                 @id @default(uuid(7)) @db.Uuid
-  mediaType   MediaUsageType         @map("media_type")
-  mediaId     String                 @map("media_id") @db.Uuid
-  contextType MediaUsageContextType  @map("context_type")
-  contextId   String                 @map("context_id") @db.Uuid
-  usageRole   MediaUsageRole         @default(INLINE) @map("usage_role")
+  id          String                @id @default(uuid(7)) @db.Uuid
+  mediaType   MediaUsageType        @map("media_type")
+  mediaId     String                @map("media_id") @db.Uuid
+  contextType MediaUsageContextType @map("context_type")
+  contextId   String                @map("context_id") @db.Uuid
+  usageRole   MediaUsageRole        @default(INLINE) @map("usage_role")
 
   @@index([mediaType, mediaId])
   @@index([contextType, contextId])
@@ -1446,13 +1447,13 @@ model City {
   id String @id @default(uuid(7)) @db.Uuid
 
   countryId          String  @map("country_id") @db.Uuid
-  nameLocalized       String  @map("name_localized") @db.VarChar(100)
-  latitude             Decimal @db.Decimal(9, 6)
-  longitude            Decimal @db.Decimal(9, 6)
-  timezoneIdentifier   String  @map("timezone_identifier") @db.VarChar(50)
+  nameLocalized      String  @map("name_localized") @db.VarChar(100)
+  latitude           Decimal @db.Decimal(9, 6)
+  longitude          Decimal @db.Decimal(9, 6)
+  timezoneIdentifier String  @map("timezone_identifier") @db.VarChar(50)
 
-  country       Country        @relation(fields: [countryId], references: [id], onDelete: Restrict)
-  mosques       Mosque[]
+  country        Country         @relation(fields: [countryId], references: [id], onDelete: Restrict)
+  mosques        Mosque[]
   islamicCenters IslamicCenter[]
 
   createdAt DateTime @default(now()) @map("created_at")
@@ -1473,19 +1474,19 @@ model Mosque {
   localeGroupId String @map("locale_group_id") @db.Uuid
   language      String @db.VarChar(10)
 
-  cityId              String              @map("city_id") @db.Uuid
-  name                String              @db.VarChar(200)
-  latitude            Decimal             @db.Decimal(9, 6)
-  longitude           Decimal             @db.Decimal(9, 6)
-  address             String              @db.VarChar(300)
-  prayerTimeSource    PrayerTimeSource    @default(CALCULATED) @map("prayer_time_source")
-  verificationStatus  VerificationStatus  @default(SUBMITTED) @map("verification_status")
-  contactInfo         String?             @map("contact_info") @db.VarChar(200)
-  submittedBy         String              @map("submitted_by") @db.Uuid
+  cityId             String             @map("city_id") @db.Uuid
+  name               String             @db.VarChar(200)
+  latitude           Decimal            @db.Decimal(9, 6)
+  longitude          Decimal            @db.Decimal(9, 6)
+  address            String             @db.VarChar(300)
+  prayerTimeSource   PrayerTimeSource   @default(CALCULATED) @map("prayer_time_source")
+  verificationStatus VerificationStatus @default(SUBMITTED) @map("verification_status")
+  contactInfo        String?            @map("contact_info") @db.VarChar(200)
+  submittedBy        String             @map("submitted_by") @db.Uuid
 
-  city       City                       @relation(fields: [cityId], references: [id], onDelete: Restrict)
-  submitter  User                       @relation(fields: [submittedBy], references: [id], onDelete: Restrict)
-  centers    MosqueCenterAffiliation[]
+  city      City                      @relation(fields: [cityId], references: [id], onDelete: Restrict)
+  submitter User                      @relation(fields: [submittedBy], references: [id], onDelete: Restrict)
+  centers   MosqueCenterAffiliation[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -1508,10 +1509,10 @@ model IslamicCenter {
   contactInfo        String?            @map("contact_info") @db.VarChar(200)
   verificationStatus VerificationStatus @default(SUBMITTED) @map("verification_status")
 
-  city         City                        @relation(fields: [cityId], references: [id], onDelete: Restrict)
-  mosques      MosqueCenterAffiliation[]
-  scholars     ScholarCenterAffiliation[]
-  events       Event[]
+  city     City                       @relation(fields: [cityId], references: [id], onDelete: Restrict)
+  mosques  MosqueCenterAffiliation[]
+  scholars ScholarCenterAffiliation[]
+  events   Event[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -1539,15 +1540,15 @@ model Event {
   localeGroupId String @map("locale_group_id") @db.Uuid
   language      String @db.VarChar(10)
 
-  title           String    @db.VarChar(200)
-  description     String?   @db.Text
-  startTime       DateTime  @map("start_time")
-  endTime         DateTime? @map("end_time")
-  isVirtual       Boolean   @default(false) @map("is_virtual")
-  islamicCenterId String?   @map("islamic_center_id") @db.Uuid
+  title           String        @db.VarChar(200)
+  description     String?       @db.Text
+  startTime       DateTime      @map("start_time")
+  endTime         DateTime?     @map("end_time")
+  isVirtual       Boolean       @default(false) @map("is_virtual")
+  islamicCenterId String?       @map("islamic_center_id") @db.Uuid
   status          ContentStatus @default(DRAFT)
 
-  islamicCenter IslamicCenter?  @relation(fields: [islamicCenterId], references: [id], onDelete: SetNull)
+  islamicCenter IslamicCenter? @relation(fields: [islamicCenterId], references: [id], onDelete: SetNull)
   scholars      EventScholar[]
 
   createdAt DateTime @default(now()) @map("created_at")
@@ -1599,21 +1600,21 @@ enum AuditAction {
 }
 
 model AuditLogEntry {
-  id                     String      @id @default(uuid(7)) @db.Uuid
-  entityType             String      @map("entity_type") @db.VarChar(50)
-  entityId               String      @map("entity_id") @db.Uuid
-  action                 AuditAction
-  actorUserId            String      @map("actor_user_id") @db.Uuid
+  id                      String      @id @default(uuid(7)) @db.Uuid
+  entityType              String      @map("entity_type") @db.VarChar(50)
+  entityId                String      @map("entity_id") @db.Uuid
+  action                  AuditAction
+  actorUserId             String      @map("actor_user_id") @db.Uuid
   actorRoleAtTime         String      @map("actor_role_at_time") @db.VarChar(30)
-  previousStatus         String?     @map("previous_status") @db.VarChar(30)
-  newStatus              String?     @map("new_status") @db.VarChar(30)
-  changedFields          Json?       @map("changed_fields")
-  relatedContentVersionId String?    @map("related_content_version_id") @db.Uuid
-  reason                 String?     @db.VarChar(500)
-  occurredAt             DateTime    @default(now()) @map("occurred_at")
+  previousStatus          String?     @map("previous_status") @db.VarChar(30)
+  newStatus               String?     @map("new_status") @db.VarChar(30)
+  changedFields           Json?       @map("changed_fields")
+  relatedContentVersionId String?     @map("related_content_version_id") @db.Uuid
+  reason                  String?     @db.VarChar(500)
+  occurredAt              DateTime    @default(now()) @map("occurred_at")
 
-  actor           User            @relation(fields: [actorUserId], references: [id], onDelete: Restrict)
-  relatedVersion  ContentVersion? @relation(fields: [relatedContentVersionId], references: [id], onDelete: SetNull)
+  actor          User            @relation(fields: [actorUserId], references: [id], onDelete: Restrict)
+  relatedVersion ContentVersion? @relation(fields: [relatedContentVersionId], references: [id], onDelete: SetNull)
 
   @@index([entityType, entityId, occurredAt])
   @@map("audit_log_entries")
@@ -1651,21 +1652,21 @@ model ContentVersion {
   changedBy        String   @map("changed_by") @db.Uuid
   createdAt        DateTime @default(now()) @map("created_at")
 
-  changer        User            @relation(fields: [changedBy], references: [id], onDelete: Restrict)
-  auditEntries   AuditLogEntry[]
+  changer      User            @relation(fields: [changedBy], references: [id], onDelete: Restrict)
+  auditEntries AuditLogEntry[]
 
   @@unique([entityType, entityId, versionNumber])
   @@map("content_versions")
 }
 
 model DraftRevision {
-  id            String   @id @default(uuid(7)) @db.Uuid
-  entityType    String   @map("entity_type") @db.VarChar(50)
-  entityId      String   @map("entity_id") @db.Uuid
-  revisionNumber Int     @map("revision_number")
-  fullSnapshot  Json     @map("full_snapshot")
-  changedBy     String   @map("changed_by") @db.Uuid
-  createdAt     DateTime @default(now()) @map("created_at")
+  id             String   @id @default(uuid(7)) @db.Uuid
+  entityType     String   @map("entity_type") @db.VarChar(50)
+  entityId       String   @map("entity_id") @db.Uuid
+  revisionNumber Int      @map("revision_number")
+  fullSnapshot   Json     @map("full_snapshot")
+  changedBy      String   @map("changed_by") @db.Uuid
+  createdAt      DateTime @default(now()) @map("created_at")
 
   changer User @relation(fields: [changedBy], references: [id], onDelete: Restrict)
 
@@ -1714,10 +1715,10 @@ model SystemSetting {
 }
 
 model FeatureFlag {
-  id                 String  @id @default(uuid(7)) @db.Uuid
-  flagKey            String  @unique @map("flag_key") @db.VarChar(100)
-  isEnabled          Boolean @default(false) @map("is_enabled")
-  rolloutPercentage  Int?    @default(0) @map("rollout_percentage")
+  id                String  @id @default(uuid(7)) @db.Uuid
+  flagKey           String  @unique @map("flag_key") @db.VarChar(100)
+  isEnabled         Boolean @default(false) @map("is_enabled")
+  rolloutPercentage Int?    @default(0) @map("rollout_percentage")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
