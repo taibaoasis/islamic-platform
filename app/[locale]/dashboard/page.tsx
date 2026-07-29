@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
+import { requireAuthentication } from "@/lib/auth/server";
 import { Header } from "@/components/ui/header";
 import { Footer } from "@/components/ui/footer";
 import { Link } from "@/i18n/navigation";
@@ -36,6 +37,8 @@ export async function generateMetadata({
  * four widgets, not full administration.
  */
 export default async function DashboardPage() {
+  await requireAuthentication();
+
   const t = await getTranslations("academy.dashboard");
   const tNav = await getTranslations("nav");
   const tFooter = await getTranslations("footer");
